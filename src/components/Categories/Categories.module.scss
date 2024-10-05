@@ -2,13 +2,14 @@
 
   &-list {
     display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
   }
 
   &-item {
     background-color: var(--color-light-gray);
-    padding: 13px 30px;
+    padding: 10px 24px;
     border-radius: 30px;
-    margin-right: 10px;
     font-weight: bold;
     cursor: pointer;
     transition:

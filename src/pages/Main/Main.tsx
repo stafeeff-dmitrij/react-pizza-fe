@@ -5,6 +5,8 @@ import Categories from '../../components/Categories/Categories.tsx';
 import Sorting from '../../components/Sorting/Sorting.tsx';
 import VerticalCard from '../../components/Cards/VerticalCard/VerticalCard.tsx';
 
+import { pizzasConst } from '../../helpers/mock-data.ts';
+
 import styles from './Main.module.scss';
 
 
@@ -13,20 +15,18 @@ import styles from './Main.module.scss';
  * @description Главная страница с товарами
  */
 function Main() {
+
 	return (
 		<div className={cn('container', styles['main'])}>
 			<div className={styles['top-block']}>
-				<Categories/>
+				<Categories	/>
 				<Sorting/>
 			</div>
 			<Title>Все пиццы</Title>
 			<div className={styles['products']}>
-				<VerticalCard title="Чизбургер-пицца" price={395} />
-				<VerticalCard title="Чизбургер-пицца" price={395} />
-				<VerticalCard title="Чизбургер-пицца" price={395} />
-				<VerticalCard title="Чизбургер-пицца" price={395} />
-				<VerticalCard title="Чизбургер-пицца" price={395} />
-				<VerticalCard title="Чизбургер-пицца" price={395} />
+				{pizzasConst.map(
+					pizza => <VerticalCard key={pizza.id} {...pizza} />
+				)}
 			</div>
 		</div>
 	);

@@ -15,7 +15,7 @@ function Header() {
 		<div className={cn('container', styles['header'])}>
 			<Link to="/">
 				<div className={styles['logo']}>
-					<img className={styles['logo-image']} src="/image/pizza-logo.svg" alt="Pizza logo"/>
+					<img className={styles['logo-image']} src="/images/icons/pizza-logo.svg" alt="Pizza logo"/>
 					<div className={styles['logo-text']}>
 						<h1 className={styles['title']}>React Pizza</h1>
 						<p className={styles['description']}>самая вкусная пицца во вселенной</p>

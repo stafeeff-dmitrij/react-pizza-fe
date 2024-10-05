@@ -10,10 +10,10 @@ import styles from './CartLink.module.scss';
  */
 function CartLink() {
 	return (
-		<Link to="/cart" className={cn('button', styles['link'])}>
-			<span>520 ₽</span>
+		<Link to="/cart" className={cn('button', styles['button-cart'])}>
+			<span className={styles['text']}>520 ₽</span>
 			<div className={styles['delimiter']} />
-			<svg
+			<svg className={styles['card-icon']}
 				width="18"
 				height="18"
 				viewBox="0 0 18 18"
@@ -42,7 +42,7 @@ function CartLink() {
 					strokeLinejoin="round"
 				/>
 			</svg>
-			<span>3</span>
+			<span className={styles['text']}>3</span>
 		</Link>
 	);
 }

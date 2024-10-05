@@ -1,4 +1,9 @@
+import { useEffect, useState } from 'react';
 import cn from 'classnames';
+
+import { categoriesConst } from '../../helpers/mock-data.ts';
+
+import { CategoriesProps } from './Categories.props.ts';
 
 import styles from './Categories.module.scss';
 
@@ -8,14 +13,35 @@ import styles from './Categories.module.scss';
  * @description Блок с категориями товаров
  */
 function Categories() {
+
+	const [activeIndex, setActiveIndex] = useState<number>(0);
+	const [categories, setCategories] = useState<CategoriesProps[]>(categoriesConst);
+
+	const onClickLink = (categoryId: number) => {
+		setActiveIndex(categoryId);
+	};
+
+	// добавляем все категории с полученным
+	useEffect(() => {
+		setCategories([{
+			id: 0,
+			name: 'Все'
+		}, ...categories])
+	}, [])
+
 	return (
 		<ul className={styles['categories-list']}>
-			<li className={cn(styles['categories-item'], styles['active'])}>Все</li>
-			<li className={styles['categories-item']}>Мясные</li>
-			<li className={styles['categories-item']}>Вегетарианская</li>
-			<li className={styles['categories-item']}>Гриль</li>
-			<li className={styles['categories-item']}>Острые</li>
-			<li className={styles['categories-item']}>Закрытые</li>
+			{categories.map(category =>
+				<li
+					key={category.id}
+					className={cn(styles['categories-item'], {
+						[styles['active']]: category.id === activeIndex,
+					})}
+					onClick={() => onClickLink(category.id)}
+				>
+					{category.name}
+				</li>
+			)}
 		</ul>
 	);
 }
