@@ -1,0 +1,29 @@
+.button-add {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 10px;
+}
+.button-add .text {
+  font-weight: 600;
+  font-size: 16px;
+}
+.button-add:hover .count {
+  background-color: var(--color-white);
+  color: var(--color-orange);
+}
+.button-add .count {
+  display: inline-block;
+  border-radius: 30px;
+  background-color: var(--color-orange);
+  color: var(--color-white);
+  font-weight: 600;
+  width: 22px;
+  height: 22px;
+  font-style: normal;
+  font-size: 13px;
+  line-height: 22px;
+  position: relative;
+}
+
+/*# sourceMappingURL=ButtonAdd.module.css.map */

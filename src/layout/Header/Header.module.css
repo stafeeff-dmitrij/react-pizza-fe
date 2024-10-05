@@ -1,0 +1,32 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: var(--border-light-gray);
+  padding: 40px 0;
+}
+.header .logo {
+  display: flex;
+  align-items: center;
+  column-gap: 15px;
+}
+.header .logo-image {
+  width: 38px;
+}
+.header .logo-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.header .logo-text .title {
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: 0.24px;
+  text-transform: uppercase;
+}
+.header .logo-text .description {
+  color: var(--color-dark-gray);
+  font-size: 16px;
+}
+
+/*# sourceMappingURL=Header.module.css.map */

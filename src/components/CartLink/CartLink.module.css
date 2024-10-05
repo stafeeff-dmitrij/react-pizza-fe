@@ -1,0 +1,23 @@
+.link {
+  display: flex;
+  align-items: center;
+  line-height: 23px;
+  padding: 12px 25px;
+}
+.link .delimiter {
+  width: 1px;
+  height: 25px;
+  background-color: rgba(255, 255, 255, 0.25);
+  margin-left: 14px;
+  margin-right: 14px;
+}
+.link svg {
+  margin-right: 8px;
+  margin-bottom: 1px;
+}
+.link span {
+  font-weight: 600;
+  font-size: 16px;
+}
+
+/*# sourceMappingURL=CartLink.module.css.map */

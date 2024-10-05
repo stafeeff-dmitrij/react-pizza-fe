@@ -1,0 +1,45 @@
+.sort-block {
+  position: relative;
+}
+.sort-block .label {
+  display: flex;
+  align-items: center;
+}
+.sort-block .label svg {
+  margin-right: 8px;
+}
+.sort-block .label b {
+  margin-right: 8px;
+}
+.sort-block .label span {
+  color: var(--color-orange);
+  border-bottom: 1px dashed var(--color-orange);
+  cursor: pointer;
+}
+.sort-block .type {
+  position: absolute;
+  right: 0;
+  margin-top: 15px;
+  background: #ffffff;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.09);
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 10px 0;
+  width: 160px;
+}
+.sort-block .type-list {
+  overflow: hidden;
+}
+.sort-block .type-item {
+  padding: 12px 20px;
+  cursor: pointer;
+}
+.sort-block .type-item.active, .sort-block .type-item:hover {
+  background: rgba(254, 95, 30, 0.05);
+}
+.sort-block .type-item.active {
+  font-weight: bold;
+  color: var(--color-orange);
+}
+
+/*# sourceMappingURL=Sorting.module.css.map */

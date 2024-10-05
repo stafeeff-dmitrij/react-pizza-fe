@@ -1,0 +1,19 @@
+.main {
+  display: flex;
+  flex-direction: column;
+  row-gap: 35px;
+  padding-block: 40px 80px;
+}
+
+.top-block {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.products {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 55px;
+}

@@ -1,0 +1,25 @@
+.categories-list {
+  display: flex;
+}
+.categories-item {
+  background-color: var(--color-light-gray);
+  padding: 13px 30px;
+  border-radius: 30px;
+  margin-right: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color var(--transition-duration) ease-in-out, outline var(--transition-duration) ease-in-out, color var(--transition-duration) ease-in-out;
+}
+.categories-item:hover {
+  background-color: var(--color-gray);
+}
+.categories-item:active {
+  background-color: var(--color-light-gray);
+  outline: var(--border-dark-gray);
+}
+.categories-item.active {
+  background-color: var(--color-black);
+  color: var(--color-light-gray);
+}
+
+/*# sourceMappingURL=Categories.module.css.map */

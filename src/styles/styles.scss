@@ -1,0 +1,88 @@
+@import
+'normalize',
+'variables',
+'globals';
+
+body {
+  background-color: var(--color-yellow);
+}
+
+.wrapper {
+  width: calc(100vw - 100px);
+  height: 100%;
+  background-color: #fff;
+  margin: 50px auto;
+  border-radius: 10px;
+  max-width: 1400px;
+}
+
+.container {
+  margin: 0 auto;
+  padding-inline: 50px;
+}
+
+.button {
+  background-color: var(--color-orange);
+  border-radius: 30px;
+  padding: 10px 12px;
+  min-width: 100px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color var(--transition-duration) ease-in-out, border-color var(--transition-duration) ease-in-out;
+  border: 1px solid transparent;
+
+  &,
+  span {
+    color: #fff;
+  }
+
+  i,
+  span,
+  path,
+  svg {
+    transition: all var(--transition-duration) ease-in-out;
+  }
+
+  &:hover {
+    background-color: var(--color-dark-orange);
+  }
+
+  &:active {
+    background-color: var(--color-light-orange);
+    transform: translateY(1px);
+  }
+}
+
+.outline {
+  background-color: var(--color-white);
+  border-color: var(--color-orange);
+  &,
+  span {
+    color: var(--color-orange);
+  }
+
+  svg {
+    path {
+      fill: var(--color-orange);
+    }
+  }
+
+  &:hover {
+    background-color: var(--color-orange);
+
+    &,
+    span {
+      color: var(--color-white);
+    }
+
+    svg {
+      path {
+        fill: var(--color-white);
+      }
+    }
+  }
+
+  &:active {
+    background-color: var(--color-dark-orange);
+  }
+}
