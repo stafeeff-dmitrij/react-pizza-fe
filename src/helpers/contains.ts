@@ -8,3 +8,9 @@ export enum PizzaSizes {
 	average = 30,  // 1
 	big = 40  // 2
 }
+
+export enum SortingTypes {
+	popular = 'популярности',
+	price = 'цене',
+	alphabet = 'алфавиту'
+}

@@ -1,17 +1,19 @@
 .sort-block {
   position: relative;
+  flex-shrink: 0;
 }
 .sort-block .label {
   display: flex;
   align-items: center;
+  padding-block: 10px;
 }
 .sort-block .label svg {
   margin-right: 8px;
 }
-.sort-block .label b {
+.sort-block .label .text {
   margin-right: 8px;
 }
-.sort-block .label span {
+.sort-block .label .input-type {
   color: var(--color-orange);
   border-bottom: 1px dashed var(--color-orange);
   cursor: pointer;
@@ -19,12 +21,11 @@
 .sort-block .type {
   position: absolute;
   right: 0;
-  margin-top: 15px;
-  background: #ffffff;
+  margin-top: 8px;
+  background: var(--color-white);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.09);
-  border-radius: 10px;
+  border-radius: var(--border-radius);
   overflow: hidden;
-  padding: 10px 0;
   width: 160px;
 }
 .sort-block .type-list {

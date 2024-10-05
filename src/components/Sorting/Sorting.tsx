@@ -1,4 +1,7 @@
+import { useState } from 'react';
 import cn from 'classnames';
+
+import { SortingTypes } from '../../helpers/contains.ts';
 
 import styles from './Sorting.module.scss';
 
@@ -8,6 +11,18 @@ import styles from './Sorting.module.scss';
  * @description Блок с выбором параметра сортировки товаров
  */
 function Sorting() {
+
+	const [isVisible, setIsVisible] = useState(false);
+	const [selectedValue, setSelectedValue] = useState<string>(SortingTypes.popular);
+
+	const sortingValues: string[] = Object.values(SortingTypes);
+
+	// сохранение параметра сортировки и закрытие выпадающего списка
+	const onClickSorting = (value: string) => {
+		setSelectedValue(value);
+		setIsVisible(false);
+	};
+
 	return (
 		<div className={styles['sort-block']}>
 			<div className={styles['label']}>
@@ -23,16 +38,27 @@ function Sorting() {
 						fill="#2C2C2C"
 					/>
 				</svg>
-				<b>Сортировка по:</b>
-				<span>популярности</span>
+				<b className={styles['text']}>Сортировка по:</b>
+				<span className={styles['input-type']} onClick={() => setIsVisible(!isVisible)}>{selectedValue}</span>
 			</div>
-			<div className={styles['type']}>
-				<ul className={styles['type-list']}>
-					<li className={cn(styles['active'], styles['type-item'])}>популярности</li>
-					<li className={styles['type-item']}>цене</li>
-					<li className={styles['type-item']}>алфавиту</li>
-				</ul>
-			</div>
+			{
+				isVisible &&
+				<div className={styles['type']}>
+					<ul className={styles['type-list']}>
+						{/* т.к. массив статичен, то можно передать в качестве ключа индекс */}
+						{sortingValues.map((value, index) =>
+							<li
+								key={index}
+								className={cn(styles['type-item'], {
+									[styles['active']]: value === selectedValue
+								})}
+								onClick={() => onClickSorting(value)}
+							>{value}
+							</li>
+						)}
+					</ul>
+				</div>
+			}
 		</div>
 	);
 }

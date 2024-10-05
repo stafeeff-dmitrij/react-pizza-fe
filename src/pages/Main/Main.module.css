@@ -8,14 +8,15 @@
 .top-block {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .products {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 55px;
+  row-gap: 55px;
+  column-gap: clamp(15px, 2.0833333333vw, 30px);
 }
 
 /*# sourceMappingURL=Main.module.css.map */

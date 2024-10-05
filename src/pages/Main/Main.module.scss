@@ -8,12 +8,13 @@
 .top-block {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .products {
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
-  gap: 55px;
+  row-gap: 55px;
+  column-gap: clamp(15px, #{30 / 1440 * 100}vw, 30px);
 }

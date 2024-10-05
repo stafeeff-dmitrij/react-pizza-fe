@@ -1,19 +1,21 @@
 .sort-block {
   position: relative;
+  flex-shrink: 0;
 
   .label {
     display: flex;
     align-items: center;
+    padding-block: 10px;
 
     svg {
       margin-right: 8px;
     }
 
-    b {
+    .text {
       margin-right: 8px;
     }
 
-    span {
+    .input-type {
       color: var(--color-orange);
       border-bottom: 1px dashed var(--color-orange);
       cursor: pointer;
@@ -23,12 +25,11 @@
   .type {
     position: absolute;
     right: 0;
-    margin-top: 15px;
-    background: #ffffff;
+    margin-top: 8px;
+    background: var(--color-white);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.09);
-    border-radius: 10px;
+    border-radius: var(--border-radius);
     overflow: hidden;
-    padding: 10px 0;
     width: 160px;
 
     &-list {
