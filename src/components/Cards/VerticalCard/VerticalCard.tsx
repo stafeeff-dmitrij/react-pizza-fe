@@ -5,6 +5,8 @@ import ButtonAdd from '../../Buttons/ButtonAdd/ButtonAdd.tsx';
 import { PizzaSizes, PizzaTypes } from '../../../helpers/contains.ts';
 
 import { VerticalCardProps } from './VerticalCard.props.ts';
+import { sizesConst } from '../../../helpers/mock-data/sizes.ts';
+import { doughTypesConst } from '../../../helpers/mock-data/dough_types.ts';
 
 import styles from './VarticalCard.module.scss';
 
@@ -16,11 +18,9 @@ import styles from './VarticalCard.module.scss';
  */
 function VerticalCard(pizza: VerticalCardProps) {
 
-	const [typePizza, setTypePizza] = useState<number>(0);
-	const [sizePizza, setSizePizza] = useState<number>(PizzaSizes.small);
+	const [typePizza, setTypePizza] = useState<string>(PizzaTypes.slim);
+	const [sizePizza, setSizePizza] = useState<string>(PizzaSizes.small);
 	const [count, setCount] = useState<number>(0);
-
-	const types = Object.values(PizzaTypes);
 
 	const onClickAdd = () => {
 		if (count >= 10) {
@@ -28,6 +28,7 @@ function VerticalCard(pizza: VerticalCardProps) {
 			return;
 		}
 		setCount(count + 1);
+		console.log(`Добавлена пицца: ${typePizza}, ${sizePizza}, ${count}`);
 	};
 
 	return (
@@ -40,25 +41,27 @@ function VerticalCard(pizza: VerticalCardProps) {
 			<h4 className={styles['title']}>{pizza.name}</h4>
 			<div className={styles['selector']}>
 				<ul className={styles['selector-list']}>
-					{pizza.types.map(
-						typeIndex => <li
+					{doughTypesConst.map(
+						(type) => <li
+							key={type.id}
 							className={cn(styles['selector-item'], {
-								[styles['active']]: typePizza === typeIndex
+								[styles['active']]: typePizza === type.id
 							})}
-							onClick={() => setTypePizza(typeIndex)}
+							onClick={() => setTypePizza(type.id)}
 						>
-							{types[typeIndex]}
+							{type.name}
 						</li>
 					)}
 				</ul>
 				<ul className={styles['selector-list']}>
-					{pizza.sizes.map(
-						size => <li
+					{sizesConst.map(
+						(size) => <li
+							key={size.id}
 							className={cn(styles['selector-item'], {
-								[styles['active']]: sizePizza === size
+								[styles['active']]: sizePizza === size.id
 							})}
-							onClick={() => setSizePizza(size)}
-						>{size} см.
+							onClick={() => setSizePizza(size.id)}
+						>{size.value} см.
 						</li>
 					)}
 				</ul>

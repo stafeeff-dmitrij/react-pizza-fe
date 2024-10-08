@@ -2,8 +2,6 @@ export interface VerticalCardProps {
 	id: number,
 	name: string,
 	image: string,
-	types: number[],
-	sizes: number[],
-	category: number,
+	category_id: number,
 	price: number
 }

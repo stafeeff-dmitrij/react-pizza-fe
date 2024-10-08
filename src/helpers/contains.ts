@@ -1,12 +1,12 @@
 export enum PizzaTypes {
-	slim = 'тонкое',  // 0
-	traditional = 'традиционное' // 1
+	slim = 'slim',
+	traditional = 'traditional'
 }
 
 export enum PizzaSizes {
-	small = 26,  // 0
-	average = 30,  // 1
-	big = 40  // 2
+	small = 'small',
+	average = 'average',
+	big = 'big'
 }
 
 export enum SortingTypes {

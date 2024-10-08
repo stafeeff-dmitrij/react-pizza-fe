@@ -16,5 +16,5 @@
   flex-wrap: wrap;
   justify-content: space-between;
   row-gap: 55px;
-  column-gap: clamp(15px, #{30 / 1440 * 100}vw, 30px);
+  column-gap: clamp(15px, 30 / 1440 * 100vw, 30px);
 }

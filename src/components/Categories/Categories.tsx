@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import cn from 'classnames';
 
-import { categoriesConst } from '../../helpers/mock-data.ts';
-
 import { CategoriesProps } from './Categories.props.ts';
+import { categoriesConst } from '../../helpers/mock-data/categories.ts';
 
 import styles from './Categories.module.scss';
 

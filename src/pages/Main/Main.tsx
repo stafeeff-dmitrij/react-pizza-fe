@@ -5,7 +5,7 @@ import Categories from '../../components/Categories/Categories.tsx';
 import Sorting from '../../components/Sorting/Sorting.tsx';
 import VerticalCard from '../../components/Cards/VerticalCard/VerticalCard.tsx';
 
-import { pizzasConst } from '../../helpers/mock-data.ts';
+import { pizzasConst } from '../../helpers/mock-data/pizzas.ts';
 
 import styles from './Main.module.scss';
 
