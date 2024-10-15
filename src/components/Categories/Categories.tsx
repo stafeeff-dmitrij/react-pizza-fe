@@ -7,6 +7,7 @@ import getEnvVariables from '../../helpers/envVariables.ts';
 import { CategoriesProps } from './Categories.props.ts';
 
 import styles from './Categories.module.scss';
+import CategoriesLoader from '../Loader/CategoriesLoader.tsx';
 
 
 /**
@@ -57,7 +58,7 @@ function Categories() {
 
 	return (
 		<ul className={styles['categories-list']}>
-			{isLoading && <p>Идет загрузка...</p>}
+			{isLoading && [...new Array(5)].map((_, index) => <CategoriesLoader key={index} />)}
 			{!isLoading && categories.map(category =>
 				<li
 					key={category.id}

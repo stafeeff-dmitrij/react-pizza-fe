@@ -1,13 +1,14 @@
 import { useEffect, useState } from 'react';
 import cn from 'classnames';
-import axios, { AxiosError } from "axios";
+import axios, { AxiosError } from 'axios';
 
 import Title from '../../components/Title/Title.tsx';
 import Categories from '../../components/Categories/Categories.tsx';
 import Sorting from '../../components/Sorting/Sorting.tsx';
-import VerticalCard from '../../components/Cards/VerticalCard/VerticalCard.tsx';
 import getEnvVariables from '../../helpers/envVariables.ts';
 import { Pizza } from '../../interfaces/pizza.interface.ts';
+import VerticalCardLoader from '../../components/Loader/VerticalCardLoader.tsx';
+import VerticalCard from '../../components/Cards/VerticalCard/VerticalCard.tsx';
 
 import styles from './Main.module.scss';
 
@@ -64,9 +65,9 @@ function Main() {
 			</div>
 			<Title>Все пиццы</Title>
 			<div className={styles['products']}>
-				{isLoading && <p>Идет загрузка...</p> }
-				{!isLoading && pizzas.map(
-					pizza => <VerticalCard key={pizza.id} {...pizza} />
+				{isLoading
+					? [...new Array(6)].map((_, index) => <VerticalCardLoader key={index} />)
+					: pizzas.map(pizza => <VerticalCard key={pizza.id} {...pizza} />
 				)}
 			</div>
 		</div>
