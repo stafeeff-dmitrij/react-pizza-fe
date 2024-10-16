@@ -1,7 +1,10 @@
 import { useEffect, useState } from 'react';
-import cn from 'classnames';
+import { useDispatch, useSelector } from 'react-redux';
 import axios, { AxiosError } from 'axios';
+import cn from 'classnames';
 
+import { AppDispatch, RootState } from '../../redux/store.ts';
+import { setCategoryId } from '../../redux/slices/filterSlice.ts';
 import { Pizza } from '../../interfaces/pizza.interface.ts';
 import getEnvVariables from '../../helpers/envVariables.ts';
 import { CategoriesProps } from './Categories.props.ts';
@@ -19,9 +22,13 @@ function Categories() {
 	// переменные окружения
 	const envVariables = getEnvVariables();
 
-	const [activeIndex, setActiveIndex] = useState<number>(0);
+	// достаем из хранилища id текущей выбранной категории
+	const categoryId = useSelector((state: RootState) => state.filter.categoryId)
+	// функция для вызова методов для изменения состояния
+	const dispatch = useDispatch<AppDispatch>()
+
 	const [categories, setCategories] = useState<CategoriesProps[]>([]);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	// добавляем все категории к полученным
 	const addAllCategory = (categories: CategoriesProps[]) => {
@@ -53,7 +60,7 @@ function Categories() {
 	}, []);
 
 	const onClickLink = (categoryId: number) => {
-		setActiveIndex(categoryId);
+		dispatch(setCategoryId(categoryId))
 	};
 
 	return (
@@ -63,7 +70,7 @@ function Categories() {
 				<li
 					key={category.id}
 					className={cn(styles['categories-item'], {
-						[styles['active']]: category.id === activeIndex,
+						[styles['active']]: category.id === categoryId,
 					})}
 					onClick={() => onClickLink(category.id)}
 				>

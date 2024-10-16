@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import cn from 'classnames';
 
-import { SortingTypes } from '../../helpers/contains.ts';
+import { useDispatch, useSelector } from 'react-redux';
+import { AppDispatch, RootState } from '../../redux/store.ts';
+import { setSortType, SortTypeState } from '../../redux/slices/filterSlice.ts';
+import { sortTypes } from '../../utils/sort.ts';
 
 import styles from './Sorting.module.scss';
 
@@ -12,23 +15,27 @@ import styles from './Sorting.module.scss';
  */
 function Sorting() {
 
-	const [isVisible, setIsVisible] = useState(false);
-	const [selectedValue, setSelectedValue] = useState<string>(SortingTypes.popular);
+	// достаем из хранилища текущее значение сортировки
+	const sortType = useSelector((state: RootState) => state.filter.sortType);
+	// функция для вызова методов для изменения состояния
+	const dispatch = useDispatch<AppDispatch>();
 
-	const sortingValues: string[] = Object.values(SortingTypes);
+	// видимость выпадающего списка
+	const [isVisible, setIsVisible] = useState<boolean>(false);
 
 	// сохранение параметра сортировки и закрытие выпадающего списка
-	const onClickSorting = (value: string) => {
-		setSelectedValue(value);
+	const onClickSorting = (data: SortTypeState) => {
+		dispatch(setSortType(data));
 		setIsVisible(false);
 	};
 
 	return (
 		<div className={styles['sort-block']}>
 			<div className={styles['label']}>
-				<svg className={cn({
-					[styles['rotate']]: !isVisible
-				})}
+				<svg
+					className={cn({
+						[styles['rotate']]: !isVisible
+					})}
 					width="10"
 					height="6"
 					viewBox="0 0 10 6"
@@ -41,21 +48,21 @@ function Sorting() {
 					/>
 				</svg>
 				<b className={styles['text']}>Сортировка по:</b>
-				<span className={styles['input-type']} onClick={() => setIsVisible(!isVisible)}>{selectedValue}</span>
+				<span className={styles['input-type']} onClick={() => setIsVisible(!isVisible)}>{sortType.value}</span>
 			</div>
 			{
 				isVisible &&
 				<div className={styles['type']}>
 					<ul className={styles['type-list']}>
-						{/* т.к. массив статичен, то можно передать в качестве ключа индекс */}
-						{sortingValues.map((value, index) =>
+						{sortTypes.map(({ key, value }) =>
 							<li
-								key={index}
+								key={key}
 								className={cn(styles['type-item'], {
-									[styles['active']]: value === selectedValue
+									[styles['active']]: key === sortType.key
 								})}
-								onClick={() => onClickSorting(value)}
-							>{value}
+								onClick={() => onClickSorting({ key, value })}
+							>
+								{value}
 							</li>
 						)}
 					</ul>

@@ -12,5 +12,5 @@ export enum PizzaSizes {
 export enum SortingTypes {
 	popular = 'популярности',
 	price = 'цене',
-	alphabet = 'алфавиту'
+	name = 'наименованию'
 }

@@ -14,6 +14,7 @@ import styles from './Cart.module.scss';
  */
 function Cart() {
 
+	// TODO Временное состояние для отображения полной и пустой корзины
 	const [cartFull, setCartFull] = useState<boolean>(true);
 
 	return (
