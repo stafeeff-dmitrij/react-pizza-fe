@@ -1,0 +1,32 @@
+.empty-cart {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  width: 560px;
+  text-align: center
+}
+
+.title-mb {
+  margin-bottom: 10px
+}
+
+.description {
+  margin-bottom: 46px;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--color-dark-gray);
+}
+
+.image {
+  margin-bottom: 74px;
+}
+
+.cart--empty .button--black {
+  padding: 12px 0 14px;
+  width: 230px;
+  margin: 0 auto;
+  font-weight: 600;
+  font-size: 18px
+}

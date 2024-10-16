@@ -1,20 +1,53 @@
+@import "../../styles/media";
+
 .main {
   display: flex;
   flex-direction: column;
   row-gap: 35px;
   padding-block: 40px 80px;
+
+  @include mobile {
+    row-gap: 15px;
+    padding-block: 30px;
+  }
 }
 
 .top-block {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
+
+  @include mobile {
+    flex-direction: column;
+    align-items: center;
+  }
 }
 
 .products {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  row-gap: 55px;
-  column-gap: clamp(15px, 30 / 1440 * 100vw, 30px);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  row-gap: 30px;
+
+  @include desktop {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @include desktop-small {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include mobile {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  //@media (max-width: 1500px) {
+  //  grid-template-columns: repeat(3, 1fr);
+  //}
+
+  //display: flex;
+  //flex-wrap: wrap;
+  //justify-content: space-between;
+  //row-gap: 55px;
+  //column-gap: clamp(15px, 30 / 1440 * 100vw, 30px);
 }

@@ -4,19 +4,45 @@
   row-gap: 35px;
   padding-block: 40px 80px;
 }
+@media (max-width: 768px) {
+  .main {
+    row-gap: 15px;
+    padding-block: 30px;
+  }
+}
 
 .top-block {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
 }
+@media (max-width: 768px) {
+  .top-block {
+    flex-direction: column;
+    align-items: center;
+  }
+}
 
 .products {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  row-gap: 55px;
-  column-gap: clamp(15px, 2.0833333333vw, 30px);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  row-gap: 30px;
+}
+@media (max-width: 1440px) {
+  .products {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 1200px) {
+  .products {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .products {
+    grid-template-columns: repeat(1, 1fr);
+  }
 }
 
 /*# sourceMappingURL=Main.module.css.map */

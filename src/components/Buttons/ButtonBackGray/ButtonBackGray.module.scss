@@ -1,0 +1,31 @@
+.go-back-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 210px;
+  border-color: var(--color-gray);
+  background-color: var(--color-white);
+
+  &:hover {
+    background-color: var(--color-black);
+    border-color: var(--color-black);
+
+    & .text {
+      color: var(--color-light-gray);
+    }
+
+    & svg {
+      color: var(--color-light-gray);
+    }
+  }
+
+  & svg {
+    margin-right: 12px;
+    color: var(--color-gray);
+  }
+
+  & .text {
+    color: var(--color-gray);
+    font-weight: 600;
+  }
+}

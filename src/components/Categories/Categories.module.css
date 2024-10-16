@@ -11,6 +11,11 @@
   cursor: pointer;
   transition: background-color var(--transition-duration) ease-in-out, outline var(--transition-duration) ease-in-out, color var(--transition-duration) ease-in-out;
 }
+@media (max-width: 1024px) {
+  .categories-item {
+    padding: 7px 16px;
+  }
+}
 .categories-item:hover {
   background-color: var(--color-gray);
 }

@@ -10,6 +10,10 @@
 .sort-block .label svg {
   margin-right: 8px;
 }
+.sort-block .label .rotate {
+  transform: rotate(180deg);
+  transform-origin: center;
+}
 .sort-block .label .text {
   margin-right: 8px;
 }

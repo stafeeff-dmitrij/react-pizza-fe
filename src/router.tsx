@@ -2,7 +2,8 @@ import { createBrowserRouter } from 'react-router-dom';
 
 import App from './App.jsx';
 import Main from './pages/Main/Main.tsx';
-import Cart from './pages/Cart/Cart.tsx';
+import NotFound from './pages/NotFound/NotFound.tsx';
+import Cart from './pages/Cart/Cart/Cart.tsx';
 
 
 // описание всех роутов (страниц)
@@ -21,7 +22,7 @@ const router = createBrowserRouter([
 			},
 			{
 				path: '*',
-				element: <p>Страница не найдена</p>
+				element: <NotFound />
 			}
 		],
 	},

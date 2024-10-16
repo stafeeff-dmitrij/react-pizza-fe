@@ -26,7 +26,9 @@ function Sorting() {
 	return (
 		<div className={styles['sort-block']}>
 			<div className={styles['label']}>
-				<svg
+				<svg className={cn({
+					[styles['rotate']]: !isVisible
+				})}
 					width="10"
 					height="6"
 					viewBox="0 0 10 6"

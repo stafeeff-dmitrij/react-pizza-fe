@@ -11,6 +11,11 @@
       margin-right: 8px;
     }
 
+    .rotate {
+      transform: rotate(180deg);
+      transform-origin: center;
+    }
+
     .text {
       margin-right: 8px;
     }

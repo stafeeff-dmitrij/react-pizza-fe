@@ -3,6 +3,11 @@
   align-items: center;
   padding: 12px 25px !important;
 }
+@media (max-width: 1024px) {
+  .button-cart {
+    padding: 6px 18px !important;
+  }
+}
 .button-cart .delimiter {
   width: 1px;
   height: 25px;
@@ -16,6 +21,11 @@
 .button-cart .text {
   font-weight: 600;
   font-size: 16px;
+}
+@media (max-width: 1024px) {
+  .button-cart .text {
+    font-size: 14px;
+  }
 }
 
 /*# sourceMappingURL=CartLink.module.css.map */

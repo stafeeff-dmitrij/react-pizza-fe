@@ -1,3 +1,5 @@
+@import "../../styles/media";
+
 .categories {
 
   &-list {
@@ -16,6 +18,10 @@
             background-color var(--transition-duration) ease-in-out,
             outline var(--transition-duration) ease-in-out,
             color var(--transition-duration) ease-in-out;
+
+    @include tablet {
+      padding: 7px 16px;
+    }
 
     &:hover {
       background-color: var(--color-gray);

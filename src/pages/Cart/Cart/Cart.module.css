@@ -1,0 +1,162 @@
+.cart {
+  min-height: 70vh;
+  max-width: 1020px;
+  margin: 90px auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-block {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 12px;
+}
+
+.cart-clear {
+  display: flex;
+  align-items: center;
+  column-gap: 10px;
+  cursor: pointer;
+  border: none;
+  background-color: transparent;
+}
+.cart-clear .icon {
+  color: var(--color-dark-gray);
+}
+.cart-clear .text {
+  color: var(--color-dark-gray);
+  font-size: 18px;
+}
+.cart-clear:hover svg path {
+  stroke: var(--color-black);
+}
+.cart-clear:hover span {
+  color: var(--color-black);
+}
+
+.product {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  border-top: 1px solid var(--color-light-gray);
+  padding-top: 30px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+}
+
+.image {
+  display: flex;
+  width: 80px;
+  height: 80px;
+  align-items: center;
+  margin-right: 15px;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 40%;
+}
+.info .title {
+  font-size: 22px;
+}
+.info .description {
+  font-size: 18px;
+  color: #8d8d8d;
+}
+
+.count {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  column-gap: 10px;
+}
+
+.button-circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  aspect-ratio: 1;
+  min-width: 32px;
+  padding: 0;
+  background-color: transparent;
+  border: var(--border-orange);
+}
+.button-circle:hover {
+  background-color: var(--color-white);
+}
+
+.count-minus svg path:first-of-type {
+  display: none;
+}
+
+.product-count {
+  font-size: 22px;
+}
+
+.product-price {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 33%;
+}
+.product-price .price {
+  font-weight: bold;
+  font-size: 22px;
+}
+
+.button-remove {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 4%;
+  cursor: pointer;
+}
+.button-remove .remove {
+  border-color: var(--color-gray);
+}
+.button-remove .remove svg {
+  transform: rotate(45deg);
+}
+.button-remove .remove svg path {
+  fill: var(--color-gray);
+}
+
+.footer {
+  display: flex;
+  flex-direction: column;
+  row-gap: 40px;
+}
+
+.result {
+  display: flex;
+  justify-content: space-between;
+  font-size: 22px;
+}
+.result .count {
+  min-width: 180px;
+  flex-shrink: 0;
+}
+.result .price b {
+  color: var(--color-orange);
+}
+
+.buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+.pay-btn {
+  width: 210px;
+  padding: 16px;
+  font-weight: 600;
+}
+
+/*# sourceMappingURL=Cart.module.css.map */

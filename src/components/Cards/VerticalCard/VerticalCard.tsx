@@ -32,43 +32,45 @@ function VerticalCard(pizza: VerticalCardProps) {
 	};
 
 	return (
-		<div className={styles['card']}>
-			<img
-				className={styles['image']}
-				src={pizza.image}
-				alt={pizza.name}
-			/>
-			<h4 className={styles['title']}>{pizza.name}</h4>
-			<div className={styles['selector']}>
-				<ul className={styles['selector-list']}>
-					{doughTypesConst.map(
-						(type) => <li
-							key={type.id}
-							className={cn(styles['selector-item'], {
-								[styles['active']]: typePizza === type.id
-							})}
-							onClick={() => setTypePizza(type.id)}
-						>
-							{type.name}
-						</li>
-					)}
-				</ul>
-				<ul className={styles['selector-list']}>
-					{sizesConst.map(
-						(size) => <li
-							key={size.id}
-							className={cn(styles['selector-item'], {
-								[styles['active']]: sizePizza === size.id
-							})}
-							onClick={() => setSizePizza(size.id)}
-						>{size.value} см.
-						</li>
-					)}
-				</ul>
-			</div>
-			<div className={styles['bottom']}>
-				<div className={styles['price']}>от {pizza.price} ₽</div>
-				<ButtonAdd count={count} addProduct={onClickAdd}/>
+		<div className={styles['wrapper']}>
+			<div className={styles['card']}>
+				<img
+					className={styles['image']}
+					src={pizza.image}
+					alt={pizza.name}
+				/>
+				<h4 className={styles['title']}>{pizza.name}</h4>
+				<div className={styles['selector']}>
+					<ul className={styles['selector-list']}>
+						{doughTypesConst.map(
+							(type) => <li
+								key={type.id}
+								className={cn(styles['selector-item'], {
+									[styles['active']]: typePizza === type.id
+								})}
+								onClick={() => setTypePizza(type.id)}
+							>
+								{type.name}
+							</li>
+						)}
+					</ul>
+					<ul className={styles['selector-list']}>
+						{sizesConst.map(
+							(size) => <li
+								key={size.id}
+								className={cn(styles['selector-item'], {
+									[styles['active']]: sizePizza === size.id
+								})}
+								onClick={() => setSizePizza(size.id)}
+							>{size.value} см.
+							</li>
+						)}
+					</ul>
+				</div>
+				<div className={styles['bottom']}>
+					<div className={styles['price']}>от {pizza.price} ₽</div>
+					<ButtonAdd count={count} addProduct={onClickAdd}/>
+				</div>
 			</div>
 		</div>
 	);

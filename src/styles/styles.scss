@@ -1,6 +1,7 @@
 @import
 'normalize',
 'variables',
+'media',
 'globals';
 
 body {
@@ -19,6 +20,10 @@ body {
 .container {
   margin: 0 auto;
   padding-inline: 50px;
+
+  @include mobile {
+    padding-inline: 40px;
+  }
 }
 
 .button {

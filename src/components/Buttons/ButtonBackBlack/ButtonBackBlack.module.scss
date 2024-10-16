@@ -1,0 +1,27 @@
+.button-back  {
+  padding: 13px 30px;
+  background-color: var(--color-black);
+  border-radius: var(--border-radius-big);
+  text-align: center;
+  cursor: pointer;
+  transition:
+          background-color var(--transition-duration) ease-in-out,
+          border-color var(--transition-duration) ease-in-out,
+          opacity var(--transition-duration) ease-in-out,
+          transform var(--transition-duration) ease-in-out;
+  border: 1px solid transparent;
+
+  .text {
+    color: var(--color-white);
+  }
+
+  &:hover {
+    background-color: var(var(--color-black));
+    opacity: 0.9;
+  }
+
+  &:active {
+    background-color: var(--color-light-orange);
+    transform: translateY(1px);
+  }
+}

@@ -1,7 +1,13 @@
+@import "../../styles/media";
+
 .button-cart {
   display: flex;
   align-items: center;
   padding: 12px 25px !important;
+
+  @include tablet {
+    padding: 6px 18px !important;
+  }
 
   .delimiter {
     width: 1px;
@@ -18,5 +24,9 @@
   .text {
     font-weight: 600;
     font-size: 16px;
+
+    @include tablet {
+      font-size: 14px;
+    }
   }
 }

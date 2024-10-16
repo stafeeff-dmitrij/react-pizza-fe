@@ -5,9 +5,9 @@ import axios, { AxiosError } from 'axios';
 import { Pizza } from '../../interfaces/pizza.interface.ts';
 import getEnvVariables from '../../helpers/envVariables.ts';
 import { CategoriesProps } from './Categories.props.ts';
+import CategoriesLoader from '../Loader/CategoriesLoader.tsx';
 
 import styles from './Categories.module.scss';
-import CategoriesLoader from '../Loader/CategoriesLoader.tsx';
 
 
 /**
