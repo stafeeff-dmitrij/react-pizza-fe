@@ -1,0 +1,44 @@
+.pagination {
+  display: flex;
+  column-gap: 10px;
+
+  li a {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 45px;
+    aspect-ratio: 1;
+    color: var(--color-orange);
+    border: 1px solid var(--color-orange);
+    border-radius: var(--border-radius-big);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--color-white);
+      background-color: var(--color-orange);
+      border: 1px solid var(--color-dark-orange);
+    }
+  }
+
+   //т.к. класс previous не модулевский, а из сторонней библиотеки, то применить к нему стили
+   //можно указав, что класс previous является глобальным
+  :global {
+    .disabled a {
+      color: var(--color-gray);
+      border: 1px solid var(--color-gray);
+      cursor: default;
+
+      &:hover {
+        color: var(--color-gray) !important;
+        background-color: inherit;
+        border: 1px solid var(--color-gray) !important;
+      }
+    }
+
+    .selected a {
+      color: var(--color-white);
+      background-color: var(--color-dark-orange);
+      border: 1px solid var(--color-dark-orange);
+    }
+  }
+}
