@@ -4,8 +4,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border-bottom: var(--border-light-gray);
   padding: 40px 0;
+  border-bottom: var(--border-light-gray);
 
   @include mobile {
     flex-direction: column;

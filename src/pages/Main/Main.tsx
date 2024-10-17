@@ -8,7 +8,7 @@ import Title from '../../components/Title/Title.tsx';
 import Categories from '../../components/Categories/Categories.tsx';
 import Sorting from '../../components/Sorting/Sorting.tsx';
 import getEnvVariables from '../../helpers/envVariables.ts';
-import { Pizza } from '../../interfaces/pizza.interface.ts';
+import { FilterData, Pizza } from '../../interfaces/pizza.interface.ts';
 import VerticalCardLoader from '../../components/Loader/VerticalCardLoader.tsx';
 import VerticalCard from '../../components/Cards/VerticalCard/VerticalCard.tsx';
 import { SortTypeKey } from '../../redux/slices/filterSlice.ts';
@@ -26,23 +26,30 @@ function Main() {
 	const envVariables = getEnvVariables();
 
 	// достаем из хранилища id текущей выбранной категории
-	const { categoryId, sortType } = useSelector((state: RootState) => state.filter);
+	const { categoryId, sortType, searchValue } = useSelector((state: RootState) => state.filter);
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [pizzas, setPizzas] = useState<Pizza[]>([]);
 
 	// получение товаров с возможностью фильтрации по категории
-	const getProducts = async (categoryId?: number, sortKey?: SortTypeKey) => {
+	const getProducts = async (sortKey: SortTypeKey, categoryId?: number, searchValue?: string) => {
 		try {
 			// устанавливаем флаг загрузки
 			setIsLoading(true);
+
+			// динамически формируем объект с параметрами в зависимости от переданных необязательных параметров
+			const params: FilterData = {
+				sort_type: sortKey
+			}
+			if (categoryId) {
+				params.category_id = categoryId
+			}
+			if (searchValue) {
+				params.search = searchValue
+			}
+
 			const { data } = await axios.get<Pizza[]>(`${envVariables.BASE_URL}/pizzas`, {
-				// передаем необязательный параметр categoryId
-				// т.к. название ключа и параметра совпадают, можно просто указать один раз name, вместо name: name
-				params: {
-					category_id: categoryId,
-					sort_type: sortKey,
-				}
+				params: params
 			});
 			setPizzas(data);
 			// меняем флаг, что загрузка завершена
@@ -61,12 +68,8 @@ function Main() {
 	};
 
 	useEffect(() => {
-		if (categoryId != 0) {
-			getProducts(categoryId, sortType.key);
-		} else {
-			getProducts(undefined, sortType.key);
-		}
-	}, [categoryId, sortType]);
+		getProducts(sortType.key, categoryId, searchValue);
+	}, [categoryId, sortType, searchValue]);
 
 	return (
 		<div className={cn('container', styles['main'])}>
@@ -74,7 +77,11 @@ function Main() {
 				<Categories/>
 				<Sorting/>
 			</div>
-			<Title>Все пиццы</Title>
+			{searchValue
+				? <Title>Пиццы: {searchValue}</Title>
+				: <Title>Все пиццы</Title>
+			}
+
 			<div className={styles['products']}>
 				{isLoading
 					? [...new Array(6)].map((_, index) => <VerticalCardLoader key={index}/>)

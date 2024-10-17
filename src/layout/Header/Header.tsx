@@ -2,8 +2,10 @@ import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
 import CartLink from '../../components/CartLink/CartLink.tsx';
+import Search from '../../components/Search/Search.tsx';
 
 import styles from './Header.module.scss';
+
 
 
 /**
@@ -22,6 +24,7 @@ function Header() {
 					</div>
 				</div>
 			</Link>
+			<Search/>
 			<CartLink/>
 		</div>
 	);
