@@ -1,9 +1,9 @@
-import { ChangeEvent, useCallback, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 // для отложенного вызова функций
 import debounce from 'lodash.debounce';
 
-import { AppDispatch } from '../../redux/store.ts';
+import { AppDispatch, RootState } from '../../redux/store.ts';
 import { setSearchValue } from '../../redux/slices/filterSlice.ts';
 
 import styles from './Search.module.scss';
@@ -15,17 +15,22 @@ import styles from './Search.module.scss';
  */
 function Search() {
 
+	const { searchValue} = useSelector((state: RootState) => state.filter);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>();
 
 	// локальное состояние с введенным текстом (будет отображаться сразу в инпуте)
 	// searchValue будем изменять через пол секунды вместе с выполнением запроса, чтобы не грузить сильно бэк частыми запросами при вводе каждой буквы
-	const [inputValue, setInputValue] = useState('');
+	const [inputValue, setInputValue] = useState(searchValue);
 
 	// плохая практика менять DOM-элементы напрямую через document, делать это нужно через useRef!
 	// через хук useRef сохраняем всю реактовскую логику по работе с DOM-элементами в переменную
 	// в скобках указывается стартовое значение (null), которое после заменится HTML-элементом
 	const inputRef = useRef<HTMLInputElement>(null);
+
+	useEffect(() => {
+		setInputValue(searchValue);
+	}, [searchValue])
 
 	// очистка инпута и фокус на инпуте для повторного ввода текста
 	const onClickClear = () => {

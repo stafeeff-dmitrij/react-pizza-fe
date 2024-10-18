@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 import axios, { AxiosError } from 'axios';
+import qs from 'qs';
 
 import { AppDispatch, RootState } from '../../redux/store.ts';
 import Title from '../../components/Title/Title.tsx';
@@ -11,8 +13,11 @@ import getEnvVariables from '../../helpers/envVariables.ts';
 import { FilterData, Pizza, PizzaWithPaginationData } from '../../interfaces/pizza.interface.ts';
 import VerticalCardLoader from '../../components/Loader/VerticalCardLoader.tsx';
 import VerticalCard from '../../components/Cards/VerticalCard/VerticalCard.tsx';
-import { setCurrentPage, SortTypeKey } from '../../redux/slices/filterSlice.ts';
+import { setCurrentPage, setFilterParams, SortTypeKey } from '../../redux/slices/filterSlice.ts';
 import Pagination from '../../components/Pagination/Pagination.tsx';
+import { getQueryString } from '../../utils/url.ts';
+import { FilterUrlData, ParsedUrlData } from './Main.props.ts';
+import { getFilterData } from '../../utils/filterData.ts';
 
 import styles from './Main.module.scss';
 
@@ -25,6 +30,11 @@ function Main() {
 
 	// переменные окружения
 	const envVariables = getEnvVariables();
+	// для добавления параметров фильтрации в URL
+	const navigate = useNavigate();
+	// флаг для отслеживания наличия параметров в URL, чтобы не делать лишние запросы на бэк при первичной отрисовке компонента со стандартными значениями параметров
+	// и повторной перерисовкой с параметрами из URL
+	const isSearch = useRef(false);
 
 	// достаем из хранилища нужные данные
 	const { categoryId, sortType, searchValue, currentPage } = useSelector((state: RootState) => state.filter);
@@ -87,9 +97,39 @@ function Main() {
 		}
 	};
 
+	// парсинг параметров фильтрации из URL
 	useEffect(() => {
-		getProducts(sortType.key, categoryId, searchValue);
+		// если в URL есть параметры
+		if (window.location.search) {
+			// через parse преобразуем строку с параметрами в объект с соответствующими ключами и значениями
+			// предварительно убираем из строки первый символ - знак вопроса
+			const params: FilterUrlData = qs.parse(window.location.search.substring(1));
+			// дополняем объект значением сортировки, преобразуем в правильному типу
+			const fullParams: ParsedUrlData = getFilterData(params);
+			// сохранение параметров в redux
+			dispatch(setFilterParams(fullParams));
+			// меняем флаг
+			isSearch.current = true;
+		}
+	}, [])
+
+	// получение пицц при изменении категории, типа сортировки, страницы и поиска по названию
+	useEffect(() => {
+		// делаем запрос со стандартными данными из redux только, если не идет поиск товаров по параметрам из URL
+		// таким образом избавляемся от лишнего запроса на бэк
+		if (!isSearch.current) {
+			getProducts(sortType.key, categoryId, searchValue);
+		}
+		// меняем флаг
+		isSearch.current = false;
 	}, [categoryId, sortType, searchValue, currentPage]);
+
+	// добавление параметров фильтрации в URL
+	useEffect(() => {
+		const queryString: string = getQueryString(categoryId, searchValue, sortType.key, currentPage)
+		// дополняем текущий URL сгенерированной строкой с параметрами фильтрации (не забываем вначале ставить знак ?)
+		navigate(`?${queryString}`)
+	}, [categoryId, sortType, searchValue, currentPage])
 
 	return (
 		<div className={cn('container', styles['main'])}>
