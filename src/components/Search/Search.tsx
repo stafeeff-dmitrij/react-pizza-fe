@@ -1,5 +1,9 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store.ts';
+import { ChangeEvent, useCallback, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
+// для отложенного вызова функций
+import debounce from 'lodash.debounce';
+
+import { AppDispatch } from '../../redux/store.ts';
 import { setSearchValue } from '../../redux/slices/filterSlice.ts';
 
 import styles from './Search.module.scss';
@@ -11,10 +15,46 @@ import styles from './Search.module.scss';
  */
 function Search() {
 
-	// достаем из хранилища значение текущего инпута
-	const searchValue = useSelector((state: RootState) => state.filter.searchValue)
 	// функция для вызова методов для изменения состояния
-	const dispatch = useDispatch<AppDispatch>()
+	const dispatch = useDispatch<AppDispatch>();
+
+	// локальное состояние с введенным текстом (будет отображаться сразу в инпуте)
+	// searchValue будем изменять через пол секунды вместе с выполнением запроса, чтобы не грузить сильно бэк частыми запросами при вводе каждой буквы
+	const [inputValue, setInputValue] = useState('');
+
+	// плохая практика менять DOM-элементы напрямую через document, делать это нужно через useRef!
+	// через хук useRef сохраняем всю реактовскую логику по работе с DOM-элементами в переменную
+	// в скобках указывается стартовое значение (null), которое после заменится HTML-элементом
+	const inputRef = useRef<HTMLInputElement>(null);
+
+	// очистка инпута и фокус на инпуте для повторного ввода текста
+	const onClickClear = () => {
+		// сбрасываем значение в локальном состоянии
+		setInputValue('');
+		// сбрасываем значение инпута в redux состоянии (выполнится запрос на бэк)
+		dispatch(setSearchValue(''));
+		// применяем фокус на инпут для повторного ввода текста
+		inputRef.current?.focus();
+	};
+
+	// обновление значения в redux и запрос на бэк только через пол секунды после завершения ввода в инпуте,
+	// чтобы не грузить бэк частыми запросами при вводе каждого символа
+	// useCallback возвращает ссылку на функцию, созданную один раз (массив зависимостей пуст),
+	// в результате чего при перерисовке компонента функция не создается заново и не делаются лишние запросы на бэк
+	const updateSearchValue = useCallback(
+		debounce((value: string) => {
+				dispatch(setSearchValue(value));
+			},
+			500),
+		[]
+	);
+
+	const onChangeInput = (event: ChangeEvent<HTMLInputElement>) => {
+		// изменяем значение в локальном состоянии сразу
+		setInputValue(event.target.value);
+		// в redux и запрос на бэк только через пол секунды после завершения ввода текста
+		updateSearchValue(event.target.value);
+	}
 
 	return (
 		<div className={styles['search']}>
@@ -32,15 +72,17 @@ function Search() {
 					strokeLinejoin="round"
 				/>
 			</svg>
+			{/* в react можно влиять на все HTML-элементы, указав в параметре ref переменную, созданную через useRef для дальнейшего изменения HTML-элемента */}
 			<input
 				className={styles['input']}
+				ref={inputRef}
 				placeholder="Поиск..."
-				value={searchValue}
-				onChange={(e) => dispatch(setSearchValue(e.target.value))}
+				value={inputValue}
+				onChange={(event) => onChangeInput(event)}
 			/>
 			<svg
 				className={styles['clear-icon']}
-				onClick={() => dispatch(setSearchValue(''))}
+				onClick={onClickClear}
 				fill="#000000"
 				width="25px"
 				height="25px"
@@ -52,7 +94,6 @@ function Search() {
 				/>
 			</svg>
 		</div>
-
 	);
 }
 
