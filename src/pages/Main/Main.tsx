@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import cn from 'classnames';
 import axios, { AxiosError } from 'axios';
 
-import { RootState } from '../../redux/store.ts';
+import { AppDispatch, RootState } from '../../redux/store.ts';
 import Title from '../../components/Title/Title.tsx';
 import Categories from '../../components/Categories/Categories.tsx';
 import Sorting from '../../components/Sorting/Sorting.tsx';
@@ -11,7 +11,7 @@ import getEnvVariables from '../../helpers/envVariables.ts';
 import { FilterData, Pizza, PizzaWithPaginationData } from '../../interfaces/pizza.interface.ts';
 import VerticalCardLoader from '../../components/Loader/VerticalCardLoader.tsx';
 import VerticalCard from '../../components/Cards/VerticalCard/VerticalCard.tsx';
-import { SortTypeKey } from '../../redux/slices/filterSlice.ts';
+import { setCurrentPage, SortTypeKey } from '../../redux/slices/filterSlice.ts';
 import Pagination from '../../components/Pagination/Pagination.tsx';
 
 import styles from './Main.module.scss';
@@ -28,6 +28,8 @@ function Main() {
 
 	// достаем из хранилища нужные данные
 	const { categoryId, sortType, searchValue, currentPage } = useSelector((state: RootState) => state.filter);
+	// функция для вызова методов для изменения состояния
+	const dispatch = useDispatch<AppDispatch>()
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [pizzas, setPizzas] = useState<Pizza[]>([]);
@@ -58,6 +60,14 @@ function Main() {
 				`${envVariables.BASE_URL}/pizzas`,
 				{params: params}
 			);
+
+			// исправление бага, когда, н-р, для 3 страницы не возвращаются товары (т.к. нет столько товаров)
+			// делается повторный запрос с теми же условиями, но для 1 страницы
+			if (!data.items.length && currentPage != 1) {
+				console.warn(`Для страницы №${currentPage} нет товаров. Обновление текущего запроса для страницы №1`)
+				dispatch(setCurrentPage(1));
+			}
+
 			// сохраняем пиццы в состояние
 			setPizzas(data.items);
 			// сохраняем кол-во страниц из данных о пагинации с бэка
