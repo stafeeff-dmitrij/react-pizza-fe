@@ -26,16 +26,14 @@ function Main() {
 	// переменные окружения
 	const envVariables = getEnvVariables();
 
-	// достаем из хранилища id текущей выбранной категории
-	const { categoryId, sortType, searchValue } = useSelector((state: RootState) => state.filter);
+	// достаем из хранилища нужные данные
+	const { categoryId, sortType, searchValue, currentPage } = useSelector((state: RootState) => state.filter);
 
 	const [isLoading, setIsLoading] = useState(false);
 	const [pizzas, setPizzas] = useState<Pizza[]>([]);
 
-	// текущая страница в пагинации
-	const [currentPage, setCurrentPage] = useState(1);
-	// кол-во страниц с пиццами
-	const [pageCount, setPageCount] = useState<number>(1);
+	// общее кол-во страниц с пиццами
+	const [totalPageCount, setTotalPageCount] = useState<number>(1);
 
 	// получение товаров с возможностью фильтрации по категории
 	const getProducts = async (sortKey: SortTypeKey, categoryId?: number, searchValue?: string) => {
@@ -62,8 +60,8 @@ function Main() {
 			);
 			// сохраняем пиццы в состояние
 			setPizzas(data.items);
-			// сохраняем кол-во страниц в пагинации с бэка
-			setPageCount(data.pages)
+			// сохраняем кол-во страниц из данных о пагинации с бэка
+			setTotalPageCount(data.pages)
 			// меняем флаг, что загрузка завершена
 			setIsLoading(false);
 			// 	перехват ошибки, если с бэка придет невалидный JSON
@@ -100,8 +98,7 @@ function Main() {
 					)}
 			</div>
 			<Pagination
-				pageCount={pageCount}
-				onChangePage={setCurrentPage}
+				pageCount={totalPageCount}
 			/>
 		</div>
 	);

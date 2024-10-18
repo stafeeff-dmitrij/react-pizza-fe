@@ -13,6 +13,7 @@ export interface SortTypeState {
 // типизация начального состояния
 export interface FilterState {
 	categoryId: number;
+	currentPage: number;
 	sortType: SortTypeState;
 	searchValue: string;
 }
@@ -20,6 +21,7 @@ export interface FilterState {
 // начальное состояние
 const initialState: FilterState = {
 	categoryId: 0,
+	currentPage: 1,
 	sortType: { key: 'price', value: 'цене' },
 	searchValue: '',
 };
@@ -41,11 +43,14 @@ export const filterSlice = createSlice({
 		},
 		setSearchValue: (state, action: PayloadAction<string>) => {
 			state.searchValue = action.payload;
-		}
+		},
+		setCurrentPage: (state, action: PayloadAction<number>) => {
+			state.currentPage = action.payload;
+		},
 	},
 });
 
 // экспортируем (сразу диструктуризируя) функции (методы) по изменению состояния
-export const { setCategoryId, setSortType, setSearchValue } = filterSlice.actions;
+export const { setCategoryId, setSortType, setSearchValue, setCurrentPage } = filterSlice.actions;
 // экспортируем по умолчанию редюсер (в store при импорте именуется как filterReducer)
 export default filterSlice.reducer;
