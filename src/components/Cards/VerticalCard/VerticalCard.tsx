@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import cn from 'classnames';
 
 import ButtonAdd from '../../Buttons/ButtonAdd/ButtonAdd.tsx';
@@ -7,6 +8,9 @@ import { PizzaSizes, PizzaTypes } from '../../../helpers/contains.ts';
 import { VerticalCardProps } from './VerticalCard.props.ts';
 import { sizesConst } from '../../../helpers/mock-data/sizes.ts';
 import { doughTypesConst } from '../../../helpers/mock-data/dough_types.ts';
+import { AppDispatch } from '../../../redux/store.ts';
+import { addPizza } from '../../../redux/slices/cartSlice.ts';
+import { size, type } from '../HorizontalCard/HorizontalCard.props.tsx';
 
 import styles from './VarticalCard.module.scss';
 
@@ -18,17 +22,31 @@ import styles from './VarticalCard.module.scss';
  */
 function VerticalCard(pizza: VerticalCardProps) {
 
-	const [typePizza, setTypePizza] = useState<string>(PizzaTypes.slim);
-	const [sizePizza, setSizePizza] = useState<string>(PizzaSizes.small);
+	// функция для вызова методов для изменения состояния
+	const dispatch = useDispatch<AppDispatch>()
+
+	const [typePizza, setTypePizza] = useState<type>(PizzaTypes.slim);
+	const [sizePizza, setSizePizza] = useState<size>(PizzaSizes.small);
 	const [count, setCount] = useState<number>(0);
 
 	const onClickAdd = () => {
+
+		// TODO Запрос на бэк!!!
+
 		if (count >= 10) {
 			alert('Нельзя добавить в корзину более 10 одинаковых пицц!');
 			return;
 		}
+
+		const newPizza = {
+			...pizza,
+			size: sizePizza,
+			type: typePizza,
+			count: 1,
+		}
+		dispatch(addPizza(newPizza))
+
 		setCount(count + 1);
-		console.log(`Добавлена пицца: ${typePizza}, ${sizePizza}, ${count}`);
 	};
 
 	return (

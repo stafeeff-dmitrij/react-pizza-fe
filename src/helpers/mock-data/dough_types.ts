@@ -1,4 +1,13 @@
-export const doughTypesConst = [
+import { type } from '../../components/Cards/HorizontalCard/HorizontalCard.props.tsx';
+
+
+export interface DoughType {
+	id: type;
+	name: 'Тонкое' | 'Традиционное';
+	price_rise: number;
+}
+
+export const doughTypesConst: DoughType[] = [
 	{
 		id: 'slim',
 		name: 'Тонкое',

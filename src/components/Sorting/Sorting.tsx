@@ -51,7 +51,6 @@ function Sorting() {
 			if (sortDivElement != null && !path.includes(sortDivElement)) {
 				// закрываем выпадающий блок
 				setIsVisible(false);
-				console.log('Клин вне блока сортировки');
 			}
 		};
 

@@ -1,4 +1,13 @@
-export const sizesConst = [
+import { size } from '../../components/Cards/HorizontalCard/HorizontalCard.props.tsx';
+
+
+export interface Size {
+	id: size;
+	value: 26 | 30 | 40;
+	price_rise: number;
+}
+
+export const sizesConst: Size[] = [
 	{
 		id: 'small',
 		value: 26,

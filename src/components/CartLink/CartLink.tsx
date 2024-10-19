@@ -1,5 +1,8 @@
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
+
+import { RootState } from '../../redux/store.ts';
 
 import styles from './CartLink.module.scss';
 
@@ -9,9 +12,13 @@ import styles from './CartLink.module.scss';
  * @description Ссылка для перехода в корзину
  */
 function CartLink() {
+
+	// достаем из хранилища данные по общему кол-ву товаров в корзине и их общей цене
+	const { totalCount, totalPrice } = useSelector((state: RootState) => state.cart);
+
 	return (
 		<Link to="/cart" className={cn('button', styles['button-cart'])}>
-			<span className={styles['text']}>520 ₽</span>
+			<span className={styles['text']}>{totalPrice} ₽</span>
 			<div className={styles['delimiter']} />
 			<svg className={styles['card-icon']}
 				width="18"
@@ -42,7 +49,7 @@ function CartLink() {
 					strokeLinejoin="round"
 				/>
 			</svg>
-			<span className={styles['text']}>3</span>
+			<span className={styles['text']}>{totalCount}</span>
 		</Link>
 	);
 }
