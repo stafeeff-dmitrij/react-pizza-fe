@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,6 +20,11 @@ function Sorting() {
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>();
 
+	// для выделения div-элемента блока сортировки
+	// логика следующая: если клик внутри данного элемента - ничего не делаем
+	// если клик вне данного элемента - закрываем выпадающий список
+	const sortRef = useRef<HTMLDivElement>(null);
+
 	// видимость выпадающего списка
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 
@@ -29,8 +34,40 @@ function Sorting() {
 		setIsVisible(false);
 	};
 
+	// обработчик клика на родительский элемент
+	// обычно не рекомендуется обращаться к DOM-элементам вне реакта (не через useRef), однако
+	// в данном случае мы обращаемся к главному родительскому элементу body, которого нет в данном компоненте Sorting
+	// обращение к главному DOM-элементу в данном случае приемлемо
+	useEffect(() => {
+
+		// специально вынесли для передачи при навешивании и удалении обработчика клика для body
+		const handleClickOutside = (event: MouseEvent) => {
+			// сохраняем path - массив дочерних DOM-элементов, находящихся внутри элемента, по которому был клик
+			const path = event.composedPath();
+			// HTML-элемент с сортировкой (включает в себя label и выпадающий div со значениями сортировки)
+			const sortDivElement = sortRef.current;
+
+			// если блока с сортировкой нет среди дочерних элементов, значит клик был вне блока сортировки
+			if (sortDivElement != null && !path.includes(sortDivElement)) {
+				// закрываем выпадающий блок
+				setIsVisible(false);
+				console.log('Клин вне блока сортировки');
+			}
+		};
+
+		// навешиваем обработчик события клика по родительскому DOM-элементу body
+		// каждый раз при данном событии будет вызываться функция handleClickOutside
+		document.body.addEventListener('click', handleClickOutside);
+
+		// при удалении компонента Sorting (при переходе на другую страницу) выполнится return, в котором
+		// вернется функция по удалению обработчика клика
+		// таким образом мы избавимся от бага, что при переходе на другую страницу и возврате обратно на body каждый раз
+		// навесился новый обработчик события, увеличивая их кол-во (старый не удаляется автоматически)
+		return () => document.body.removeEventListener('click', handleClickOutside);
+	}, []);
+
 	return (
-		<div className={styles['sort-block']}>
+		<div className={styles['sort-block']} ref={sortRef}>
 			<div className={styles['label']}>
 				<svg
 					className={cn({
