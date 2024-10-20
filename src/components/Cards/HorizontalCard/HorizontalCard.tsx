@@ -1,9 +1,14 @@
-import { HorizontalCardProps } from './HorizontalCard.props.tsx';
-import cn from 'classnames';
 import { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import axios, { AxiosError } from 'axios';
+import cn from 'classnames';
 
 import { doughTypesConst } from '../../../helpers/mock-data/dough_types.ts';
 import { sizesConst } from '../../../helpers/mock-data/sizes.ts';
+import { HorizontalCardProps } from './HorizontalCard.props.tsx';
+import { addPizza, deletePizza } from '../../../redux/slices/cartSlice.ts';
+import getEnvVariables from '../../../helpers/envVariables.ts';
+import { AppDispatch } from '../../../redux/store.ts';
 
 import styles from './HorizontalCard.module.scss';
 
@@ -15,12 +20,26 @@ import styles from './HorizontalCard.module.scss';
  */
 function HorizontalCard(pizza: HorizontalCardProps) {
 
+	// переменные окружения
+	const envVariables = getEnvVariables();
+
+	// функция для вызова методов для изменения состояния
+	const dispatch = useDispatch<AppDispatch>()
+
 	const [typePizza, setTypePizza] = useState<string>('-');
 	const [sizePizza, setSizePizza] = useState<number>(30);
+	const [count, setCount] = useState<number>(pizza.count);
 
 	// удаление товара из корзины
-	const onClickDeletePizza = () => {
-		console.log('Удаление товара из корзины')
+	const onClickDeletePizza = async () => {
+		try {
+			await axios.delete(`${envVariables.BASE_URL}/cart/${pizza.id}`);
+			dispatch(deletePizza(pizza.id));
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				alert(error.response?.data.detail);
+			}
+		}
 	}
 
 	// уменьшение товара на один
@@ -28,9 +47,21 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 		console.log('Уменьшение товара на 1')
 	}
 
-	// увеличение товара на один
-	const onClickIncrement = () => {
-		console.log('Увеличение товара на 1')
+	// увеличение товара на один (добавление товара в корзину)
+	const onClickIncrement = async () => {
+		try {
+			const { data } = await axios.post<HorizontalCardProps>(`${envVariables.BASE_URL}/cart`, {
+				pizza_id: pizza.pizza_id,
+				type_id: pizza.type_id,
+				size_id: pizza.size_id,
+			});
+			dispatch(addPizza(data));
+			setCount(data.count);
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				alert(error.response?.data.detail);
+			}
+		}
 	}
 
 	useEffect(() => {
@@ -74,7 +105,7 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 						/>
 					</svg>
 				</div>
-				<b className={styles['product-count']}>{pizza.count}</b>
+				<b className={styles['product-count']}>{count}</b>
 				<div className={cn('button', styles['button-circle'])} onClick={onClickIncrement}>
 					<svg
 						width="10" height="10" viewBox="0 0 10 10" fill="none"

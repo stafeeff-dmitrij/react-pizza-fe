@@ -41,8 +41,6 @@ export const cartSlice = createSlice({
 			// увеличиваем кол-во пицц в данной позиции
 			if (foundPizza) {
 				foundPizza.count += 1;
-				state.pizzas = state.pizzas.filter(pizza => pizza.id !== action.payload.id);
-				state.pizzas.push(foundPizza)
 			} else {
 				// если такой пиццы нет в корзине, добавляем
 				state.pizzas.push(action.payload);
@@ -50,6 +48,10 @@ export const cartSlice = createSlice({
 			// увеличиваем общее кол-во и стоимость пицц в корзине
 			state.totalCount += 1;
 			state.totalPrice += action.payload.price;
+		},
+		// удаление товара из корзины
+		deletePizza: (state, action: PayloadAction<number>) => {
+			state.pizzas = state.pizzas.filter(pizza => pizza.id !== action.payload);
 		},
 		// очистка корзины
 		clearCart: (state) => {
@@ -64,6 +66,7 @@ export const cartSlice = createSlice({
 export const {
 	setCart,
 	addPizza,
+	deletePizza,
 	clearCart
 } = cartSlice.actions;
 // экспортируем по умолчанию редюсер (в store при импорте именуется как filterReducer)

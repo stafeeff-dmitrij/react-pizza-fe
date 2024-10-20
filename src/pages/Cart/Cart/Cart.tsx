@@ -1,4 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
+import axios, { AxiosError } from 'axios';
 import cn from 'classnames';
 
 import Title from '../../../components/Title/Title.tsx';
@@ -7,6 +8,7 @@ import ButtonBackGray from '../../../components/Buttons/ButtonBackGray/ButtonBac
 import { AppDispatch, RootState } from '../../../redux/store.ts';
 import HorizontalCard from '../../../components/Cards/HorizontalCard/HorizontalCard.tsx';
 import { clearCart } from '../../../redux/slices/cartSlice.ts';
+import getEnvVariables from '../../../helpers/envVariables.ts';
 
 import styles from './Cart.module.scss';
 
@@ -17,15 +19,24 @@ import styles from './Cart.module.scss';
  */
 function Cart() {
 
+	// переменные окружения
+	const envVariables = getEnvVariables();
+
 	// достаем из хранилища данные по общему кол-ву товаров в корзине и их общей цене
 	const { pizzas, totalCount, totalPrice } = useSelector((state: RootState) => state.cart);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
 
 	// очистка корзины с товарами
-	const onClickClearCart = () => {
-		console.log('Очистка корзины')
-		// dispatch(clearCart());
+	const onClickClearCart = async () => {
+		try {
+			await axios.delete(`${envVariables.BASE_URL}/cart`);
+			dispatch(clearCart());
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				alert(error.response?.data.detail);
+			}
+		}
 	}
 
 	return (
