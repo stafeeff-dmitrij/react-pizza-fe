@@ -40,7 +40,7 @@ export const cartSlice = createSlice({
 
 			// увеличиваем кол-во пицц в данной позиции
 			if (foundPizza) {
-				foundPizza.count += action.payload.count;
+				foundPizza.count += 1;
 				state.pizzas = state.pizzas.filter(pizza => pizza.id !== action.payload.id);
 				state.pizzas.push(foundPizza)
 			} else {
@@ -48,7 +48,7 @@ export const cartSlice = createSlice({
 				state.pizzas.push(action.payload);
 			}
 			// увеличиваем общее кол-во и стоимость пицц в корзине
-			state.totalCount += action.payload.count;
+			state.totalCount += 1;
 			state.totalPrice += action.payload.price;
 		},
 		// очистка корзины

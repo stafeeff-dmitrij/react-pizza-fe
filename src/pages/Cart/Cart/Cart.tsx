@@ -24,24 +24,9 @@ function Cart() {
 
 	// очистка корзины с товарами
 	const onClickClearCart = () => {
-		// TODO Запрос на бэк!!!
-		dispatch(clearCart());
+		console.log('Очистка корзины')
+		// dispatch(clearCart());
 	}
-
-	// удаление товара из корзины
-	// const onClickDeletePizza = () => {
-	// 	// TODO Запрос на бэк!!!
-	// }
-
-	// уменьшение товара на один
-	// const onClickMinusPizza = () => {
-	// 	// TODO Запрос на бэк!!!
-	// }
-
-	// увеличение товара на один
-	// const onClickPlusPizza = () => {
-	// 	// TODO Запрос на бэк!!!
-	// }
 
 	return (
 		<div className={cn('container', styles['cart'])}>

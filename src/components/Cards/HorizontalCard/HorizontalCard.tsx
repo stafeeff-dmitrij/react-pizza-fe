@@ -18,6 +18,21 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 	const [typePizza, setTypePizza] = useState<string>('-');
 	const [sizePizza, setSizePizza] = useState<number>(30);
 
+	// удаление товара из корзины
+	const onClickDeletePizza = () => {
+		console.log('Удаление товара из корзины')
+	}
+
+	// уменьшение товара на один
+	const onClickDecrement = () => {
+		console.log('Уменьшение товара на 1')
+	}
+
+	// увеличение товара на один
+	const onClickIncrement = () => {
+		console.log('Увеличение товара на 1')
+	}
+
 	useEffect(() => {
 		doughTypesConst.map(type => {
 			if (type.id === pizza.type_id) {
@@ -44,7 +59,7 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 				</p>
 			</div>
 			<div className={styles['count']}>
-				<div className={cn('button', styles['button-circle'], styles['count-minus'])}>
+				<div className={cn('button', styles['button-circle'], styles['count-minus'])} onClick={onClickDecrement}>
 					<svg
 						width="10" height="10" viewBox="0 0 10 10" fill="none"
 						xmlns="http://www.w3.org/2000/svg"
@@ -60,7 +75,7 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 					</svg>
 				</div>
 				<b className={styles['product-count']}>{pizza.count}</b>
-				<div className={cn('button', styles['button-circle'])}>
+				<div className={cn('button', styles['button-circle'])} onClick={onClickIncrement}>
 					<svg
 						width="10" height="10" viewBox="0 0 10 10" fill="none"
 						xmlns="http://www.w3.org/2000/svg"
@@ -79,7 +94,7 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 			<div className={styles['product-price']}>
 				<b className={styles['price']}>{pizza.price} ₽</b>
 			</div>
-			<div className={styles['button-remove']}>
+			<div className={styles['button-remove']} onClick={onClickDeletePizza}>
 				<div className={cn('button', styles['button-circle'], styles['remove'])}>
 					<svg
 						width="10" height="10" viewBox="0 0 10 10" fill="none"

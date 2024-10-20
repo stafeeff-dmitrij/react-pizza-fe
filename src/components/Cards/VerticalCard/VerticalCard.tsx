@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import cn from 'classnames';
 import axios, { AxiosError } from 'axios';
 
@@ -8,7 +8,7 @@ import { PizzaSizes, PizzaTypes } from '../../../helpers/contains.ts';
 import { VerticalCardProps } from './VerticalCard.props.ts';
 import { sizesConst } from '../../../helpers/mock-data/sizes.ts';
 import { doughTypesConst } from '../../../helpers/mock-data/dough_types.ts';
-import { AppDispatch } from '../../../redux/store.ts';
+import { AppDispatch, RootState } from '../../../redux/store.ts';
 import { addPizza } from '../../../redux/slices/cartSlice.ts';
 import { HorizontalCardProps, size, type } from '../HorizontalCard/HorizontalCard.props.tsx';
 import getEnvVariables from '../../../helpers/envVariables.ts';
@@ -26,6 +26,8 @@ function VerticalCard(pizza: VerticalCardProps) {
 	// переменные окружения
 	const envVariables = getEnvVariables();
 
+	// достаем из хранилища данные по товарам в корзине
+	const { pizzas } = useSelector((state: RootState) => state.cart);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
 
@@ -35,7 +37,6 @@ function VerticalCard(pizza: VerticalCardProps) {
 
 	// добавление товара в корзину
 	const onClickAdd = async () => {
-
 		try {
 			const { data } = await axios.post<HorizontalCardProps>(`${envVariables.BASE_URL}/cart`, {
 				pizza_id: pizza.pizza_id,
@@ -50,6 +51,23 @@ function VerticalCard(pizza: VerticalCardProps) {
 			}
 		}
 	};
+
+	// проверка и обновление кол-ва пицц в корзине, если товар с выбранными опциями уже есть в корзине
+	useEffect(() => {
+		// от лишних перерисовок и сброса счетчика
+		let flag = false;
+
+		pizzas.map(p => {
+			if (p.pizza_id == pizza.pizza_id && p.size_id === sizePizza && p.type_id === typePizza) {
+				setCount(p.count);
+				flag = true;
+				return;
+			}
+		})
+		if (!flag) {
+			setCount(0);
+		}
+	}, [pizza, pizzas, typePizza, sizePizza]);
 
 	return (
 		<div className={styles['wrapper']}>
