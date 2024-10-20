@@ -9,6 +9,7 @@ import { AppDispatch, RootState } from '../../../redux/store.ts';
 import HorizontalCard from '../../../components/Cards/HorizontalCard/HorizontalCard.tsx';
 import { clearCart } from '../../../redux/slices/cartSlice.ts';
 import getEnvVariables from '../../../helpers/envVariables.ts';
+import { formattedPrice } from '../../../utils/price.ts';
 
 import styles from './Cart.module.scss';
 
@@ -29,12 +30,16 @@ function Cart() {
 
 	// очистка корзины с товарами
 	const onClickClearCart = async () => {
-		try {
-			await axios.delete(`${envVariables.BASE_URL}/cart`);
-			dispatch(clearCart());
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				alert(error.response?.data.detail);
+		// всплывающее подтверждающее окно
+		// при подтверждении будет true и выполнится следующий код
+		if (window.confirm('Очистить корзину?')) {
+			try {
+				await axios.delete(`${envVariables.BASE_URL}/cart`);
+				dispatch(clearCart());
+			} catch (error) {
+				if (error instanceof AxiosError) {
+					alert(error.response?.data.detail);
+				}
 			}
 		}
 	}
@@ -93,7 +98,7 @@ function Cart() {
 				<div className={styles['footer']}>
 					<div className={styles['result']}>
 						<span className={styles['count']}>Всего пицц: <b>{totalCount} шт.</b></span>
-						<span className={styles['price']}>Сумма заказа: <b>{totalPrice} ₽</b></span>
+						<span className={styles['price']}>Сумма заказа: <b>{formattedPrice(totalPrice)} ₽</b></span>
 					</div>
 					<div className={styles['buttons']}>
 						<ButtonBackGray/>

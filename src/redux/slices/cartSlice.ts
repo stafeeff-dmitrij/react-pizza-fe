@@ -34,24 +34,46 @@ export const cartSlice = createSlice({
 		// в action в payload хранится передаваемый объект пиццы
 		addPizza: (state, action: PayloadAction<HorizontalCardProps>) => {
 			// ищем такую же пиццу с таким же типом теста и размером в корзине
-			const foundPizza = state.pizzas.find(pizza =>
+			const findPizza = state.pizzas.find(pizza =>
 				pizza.id === action.payload.id && pizza.size_id === action.payload.size_id && pizza.type_id === action.payload.type_id
 			);
-
 			// увеличиваем кол-во пицц в данной позиции
-			if (foundPizza) {
-				foundPizza.count += 1;
+			if (findPizza) {
+				findPizza.count = action.payload.count;
+				findPizza.price = action.payload.price;
 			} else {
 				// если такой пиццы нет в корзине, добавляем
 				state.pizzas.push(action.payload);
 			}
 			// увеличиваем общее кол-во и стоимость пицц в корзине
 			state.totalCount += 1;
-			state.totalPrice += action.payload.price;
+			state.totalPrice += Number((action.payload.price / action.payload.count).toFixed(2));
+		},
+		// уменьшение кол-во пицц
+		decrementPizza: (state, action: PayloadAction<HorizontalCardProps>) => {
+			const findPizza = state.pizzas.find(pizza => pizza.id === action.payload.id);
+			if (findPizza) {
+				if (findPizza.count === 1) {
+					state.pizzas = state.pizzas.filter(pizza => pizza.id !== action.payload.id);
+				} else {
+					state.pizzas = state.pizzas.map(pizza => {
+						if (pizza.id === action.payload.id) {
+							pizza.count = action.payload.count;
+							pizza.price = action.payload.price;
+							return pizza;
+						}
+						return pizza;
+					});
+				}
+				state.totalCount -= 1;
+				state.totalPrice -= Number((findPizza.price / findPizza.count).toFixed(2));
+			}
 		},
 		// удаление товара из корзины
-		deletePizza: (state, action: PayloadAction<number>) => {
-			state.pizzas = state.pizzas.filter(pizza => pizza.id !== action.payload);
+		deletePizza: (state, action: PayloadAction<HorizontalCardProps>) => {
+			state.pizzas = state.pizzas.filter(pizza => pizza.id !== action.payload.id);
+			state.totalCount -= action.payload.count;
+			state.totalPrice -= action.payload.price;
 		},
 		// очистка корзины
 		clearCart: (state) => {
@@ -66,6 +88,7 @@ export const cartSlice = createSlice({
 export const {
 	setCart,
 	addPizza,
+	decrementPizza,
 	deletePizza,
 	clearCart
 } = cartSlice.actions;

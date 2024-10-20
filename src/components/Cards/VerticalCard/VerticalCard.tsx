@@ -60,7 +60,7 @@ function VerticalCard(pizza: VerticalCardProps) {
 				setSizePizza(p.size_id);
 			}
 		})
-	}, []);
+	}, [pizzas]);
 
 	// проверка и обновление кол-ва пицц в корзине, если товар с выбранными параметрами уже есть в корзине
 	useEffect(() => {

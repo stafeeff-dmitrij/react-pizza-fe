@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
 import { RootState } from '../../redux/store.ts';
+import { formattedPrice } from '../../utils/price.ts';
 
 import styles from './CartLink.module.scss';
 
@@ -18,7 +19,7 @@ function CartLink() {
 
 	return (
 		<Link to="/cart" className={cn('button', styles['button-cart'])}>
-			<span className={styles['text']}>{totalPrice} ₽</span>
+			<span className={styles['text']}>{formattedPrice(totalPrice)} ₽</span>
 			<div className={styles['delimiter']} />
 			<svg className={styles['card-icon']}
 				width="18"

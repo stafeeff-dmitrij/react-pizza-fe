@@ -6,9 +6,10 @@ import cn from 'classnames';
 import { doughTypesConst } from '../../../helpers/mock-data/dough_types.ts';
 import { sizesConst } from '../../../helpers/mock-data/sizes.ts';
 import { HorizontalCardProps } from './HorizontalCard.props.tsx';
-import { addPizza, deletePizza } from '../../../redux/slices/cartSlice.ts';
+import { addPizza, decrementPizza, deletePizza } from '../../../redux/slices/cartSlice.ts';
 import getEnvVariables from '../../../helpers/envVariables.ts';
 import { AppDispatch } from '../../../redux/store.ts';
+import { formattedPrice } from '../../../utils/price.ts';
 
 import styles from './HorizontalCard.module.scss';
 
@@ -24,28 +25,48 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 	const envVariables = getEnvVariables();
 
 	// функция для вызова методов для изменения состояния
-	const dispatch = useDispatch<AppDispatch>()
+	const dispatch = useDispatch<AppDispatch>();
 
 	const [typePizza, setTypePizza] = useState<string>('-');
 	const [sizePizza, setSizePizza] = useState<number>(30);
-	const [count, setCount] = useState<number>(pizza.count);
 
 	// удаление товара из корзины
 	const onClickDeletePizza = async () => {
+		// всплывающее подтверждающее окно
+		// при подтверждении будет true и выполнится следующий код
+		if (window.confirm(
+			`Удалить пиццу: ${pizza.name.toLowerCase()}, ${typePizza} тесто, ${sizePizza} см, кол-во: ${pizza.count} из корзины?`
+		)) {
+			try {
+				await axios.delete(`${envVariables.BASE_URL}/cart/${pizza.id}`);
+				dispatch(deletePizza(pizza));
+			} catch (error) {
+				if (error instanceof AxiosError) {
+					alert(error.response?.data.detail);
+				}
+			}
+		}
+	};
+
+	// уменьшение товара на один / удаление товара
+	const onClickDecrement = async () => {
 		try {
-			await axios.delete(`${envVariables.BASE_URL}/cart/${pizza.id}`);
-			dispatch(deletePizza(pizza.id));
+			const { data } = await axios.delete<HorizontalCardProps | null>(`${envVariables.BASE_URL}/cart/${pizza.id}`, {
+				params: {
+					one_record: true
+				}
+			});
+			if (data) {
+				dispatch(decrementPizza(data));
+			} else {
+				dispatch(deletePizza(pizza));
+			}
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				alert(error.response?.data.detail);
 			}
 		}
-	}
-
-	// уменьшение товара на один
-	const onClickDecrement = () => {
-		console.log('Уменьшение товара на 1')
-	}
+	};
 
 	// увеличение товара на один (добавление товара в корзину)
 	const onClickIncrement = async () => {
@@ -56,26 +77,27 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 				size_id: pizza.size_id,
 			});
 			dispatch(addPizza(data));
-			setCount(data.count);
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				alert(error.response?.data.detail);
 			}
 		}
-	}
+	};
 
 	useEffect(() => {
 		doughTypesConst.map(type => {
-			if (type.id === pizza.type_id) {
-				setTypePizza(type.name.toLowerCase());
-			}},
-		sizesConst.map(size => {
-			if (size.id === pizza.size_id) {
-				setSizePizza(size.value);
-			}}
-		)
-		)
-	}, [])
+				if (type.id === pizza.type_id) {
+					setTypePizza(type.name.toLowerCase());
+				}
+			},
+			sizesConst.map(size => {
+					if (size.id === pizza.size_id) {
+						setSizePizza(size.value);
+					}
+				}
+			)
+		);
+	}, []);
 
 	return (
 		<div className={styles['product']}>
@@ -105,7 +127,7 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 						/>
 					</svg>
 				</div>
-				<b className={styles['product-count']}>{count}</b>
+				<b className={styles['product-count']}>{pizza.count}</b>
 				<div className={cn('button', styles['button-circle'])} onClick={onClickIncrement}>
 					<svg
 						width="10" height="10" viewBox="0 0 10 10" fill="none"
@@ -123,7 +145,7 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 				</div>
 			</div>
 			<div className={styles['product-price']}>
-				<b className={styles['price']}>{pizza.price} ₽</b>
+				<b className={styles['price']}>{formattedPrice(pizza.price)} ₽</b>
 			</div>
 			<div className={styles['button-remove']} onClick={onClickDeletePizza}>
 				<div className={cn('button', styles['button-circle'], styles['remove'])}>
