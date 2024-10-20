@@ -2,7 +2,7 @@ import { SortTypeKey } from '../redux/slices/filterSlice.ts';
 
 // типизации получаемых данных о пиццах с бэка
 export interface Pizza {
-	id: number;
+	pizza_id: number;
 	name: string;
 	image: string;
 	price: number;

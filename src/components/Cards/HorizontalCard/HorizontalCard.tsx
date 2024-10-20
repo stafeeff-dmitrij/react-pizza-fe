@@ -20,11 +20,11 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 
 	useEffect(() => {
 		doughTypesConst.map(type => {
-			if (type.id === pizza.type) {
+			if (type.id === pizza.type_id) {
 				setTypePizza(type.name.toLowerCase());
 			}},
 		sizesConst.map(size => {
-			if (size.id === pizza.size) {
+			if (size.id === pizza.size_id) {
 				setSizePizza(size.value);
 			}}
 		)

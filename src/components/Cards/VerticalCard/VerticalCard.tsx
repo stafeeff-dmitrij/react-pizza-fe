@@ -1,16 +1,17 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import cn from 'classnames';
+import axios, { AxiosError } from 'axios';
 
 import ButtonAdd from '../../Buttons/ButtonAdd/ButtonAdd.tsx';
 import { PizzaSizes, PizzaTypes } from '../../../helpers/contains.ts';
-
 import { VerticalCardProps } from './VerticalCard.props.ts';
 import { sizesConst } from '../../../helpers/mock-data/sizes.ts';
 import { doughTypesConst } from '../../../helpers/mock-data/dough_types.ts';
 import { AppDispatch } from '../../../redux/store.ts';
 import { addPizza } from '../../../redux/slices/cartSlice.ts';
-import { size, type } from '../HorizontalCard/HorizontalCard.props.tsx';
+import { HorizontalCardProps, size, type } from '../HorizontalCard/HorizontalCard.props.tsx';
+import getEnvVariables from '../../../helpers/envVariables.ts';
 
 import styles from './VarticalCard.module.scss';
 
@@ -22,6 +23,9 @@ import styles from './VarticalCard.module.scss';
  */
 function VerticalCard(pizza: VerticalCardProps) {
 
+	// переменные окружения
+	const envVariables = getEnvVariables();
+
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
 
@@ -29,24 +33,22 @@ function VerticalCard(pizza: VerticalCardProps) {
 	const [sizePizza, setSizePizza] = useState<size>(PizzaSizes.small);
 	const [count, setCount] = useState<number>(0);
 
-	const onClickAdd = () => {
+	// добавление товара в корзину
+	const onClickAdd = async () => {
 
-		// TODO Запрос на бэк!!!
-
-		if (count >= 10) {
-			alert('Нельзя добавить в корзину более 10 одинаковых пицц!');
-			return;
+		try {
+			const { data } = await axios.post<HorizontalCardProps>(`${envVariables.BASE_URL}/cart`, {
+				pizza_id: pizza.pizza_id,
+				type_id: typePizza,
+				size_id: sizePizza,
+			});
+			dispatch(addPizza(data));
+			setCount(data.count);
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				alert(error.response?.data.detail);
+			}
 		}
-
-		const newPizza = {
-			...pizza,
-			size: sizePizza,
-			type: typePizza,
-			count: 1,
-		}
-		dispatch(addPizza(newPizza))
-
-		setCount(count + 1);
 	};
 
 	return (

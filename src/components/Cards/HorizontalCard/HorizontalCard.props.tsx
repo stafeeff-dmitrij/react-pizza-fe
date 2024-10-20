@@ -6,10 +6,11 @@ export type type = 'slim' | 'traditional';
 // типизация данных об одной пицце в корзине
 export interface HorizontalCardProps {
 	id: number;
+	pizza_id: number;
 	name: string;
 	image: string;
 	price: number;
-	size: size;
-	type: type;
+	size_id: size;
+	type_id: type;
 	count: number;
 }

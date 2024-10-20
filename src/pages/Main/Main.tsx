@@ -18,6 +18,8 @@ import Pagination from '../../components/Pagination/Pagination.tsx';
 import { getQueryString } from '../../utils/url.ts';
 import { FilterUrlData, ParsedUrlData } from './Main.props.ts';
 import { getFilterData } from '../../utils/filterData.ts';
+import { clearCart, setCart } from '../../redux/slices/cartSlice.ts';
+import { HorizontalCardProps } from '../../components/Cards/HorizontalCard/HorizontalCard.props.tsx';
 
 import styles from './Main.module.scss';
 
@@ -97,6 +99,20 @@ function Main() {
 		}
 	};
 
+	const getCart = async () => {
+		try {
+			const { data } = await axios.get<HorizontalCardProps[]>(`${envVariables.BASE_URL}/cart`);
+			// очистка старых данных в корзине
+			dispatch(clearCart());
+			// сохраняем корзину в состояние
+			dispatch(setCart(data));
+		} catch (error) {
+			if (error instanceof AxiosError) {
+				alert(error.response?.data.detail);
+			}
+		}
+	}
+
 	// парсинг параметров фильтрации из URL
 	useEffect(() => {
 		// если в URL есть параметры
@@ -131,6 +147,11 @@ function Main() {
 		navigate(`?${queryString}`)
 	}, [categoryId, sortType, searchValue, currentPage])
 
+	// получение товаров в корзине
+	useEffect(() => {
+		getCart();
+	}, [])
+
 	return (
 		<div className={cn('container', styles['main'])}>
 			<div className={styles['top-block']}>
@@ -144,7 +165,7 @@ function Main() {
 			<div className={styles['products']}>
 				{isLoading
 					? [...new Array(6)].map((_, index) => <VerticalCardLoader key={index}/>)
-					: pizzas.map(pizza => <VerticalCard key={pizza.id} {...pizza} />
+					: pizzas.map(pizza => <VerticalCard key={pizza.pizza_id} {...pizza} />
 					)}
 			</div>
 			<Pagination

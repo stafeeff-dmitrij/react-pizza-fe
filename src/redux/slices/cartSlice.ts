@@ -22,12 +22,20 @@ export const cartSlice = createSlice({
 	// начальное состояние
 	initialState,
 	reducers: {
+		// сохранение корзины (при загрузке данных с бэка)
+		setCart: (state, action: PayloadAction<HorizontalCardProps[]>) => {
+			action.payload.map(record => {
+				state.pizzas.push(record);
+				state.totalCount += record.count;
+				state.totalPrice += record.price;
+			});
+		},
 		// добавление пиццы в корзину
 		// в action в payload хранится передаваемый объект пиццы
 		addPizza: (state, action: PayloadAction<HorizontalCardProps>) => {
 			// ищем такую же пиццу с таким же типом теста и размером в корзине
 			const foundPizza = state.pizzas.find(pizza =>
-				pizza.id === action.payload.id && pizza.size === action.payload.size && pizza.type === action.payload.type
+				pizza.id === action.payload.id && pizza.size_id === action.payload.size_id && pizza.type_id === action.payload.type_id
 			);
 
 			// увеличиваем кол-во пицц в данной позиции
@@ -54,6 +62,7 @@ export const cartSlice = createSlice({
 
 // экспортируем (сразу диструктуризируя) функции (методы) по изменению состояния
 export const {
+	setCart,
 	addPizza,
 	clearCart
 } = cartSlice.actions;
