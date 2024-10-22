@@ -1,19 +1,20 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import cn from 'classnames';
 import axios, { AxiosError } from 'axios';
 import qs from 'qs';
 
 import { AppDispatch, RootState } from '../../redux/store.ts';
+import { fetchPizzas } from '../../redux/slices/pizzasSlice.ts';
 import Title from '../../components/Title/Title.tsx';
 import Categories from '../../components/Categories/Categories.tsx';
 import Sorting from '../../components/Sorting/Sorting.tsx';
 import getEnvVariables from '../../helpers/envVariables.ts';
-import { FilterData, Pizza, PizzaWithPaginationData } from '../../interfaces/pizza.interface.ts';
+import { FilterData } from '../../interfaces/pizza.interface.ts';
 import VerticalCardLoader from '../../components/Loader/VerticalCardLoader.tsx';
 import VerticalCard from '../../components/Cards/VerticalCard/VerticalCard.tsx';
-import { setCurrentPage, setFilterParams, SortTypeKey } from '../../redux/slices/filterSlice.ts';
+import { selectFilter, setCurrentPage, setFilterParams } from '../../redux/slices/filterSlice.ts';
 import Pagination from '../../components/Pagination/Pagination.tsx';
 import { getQueryString } from '../../utils/url.ts';
 import { FilterUrlData, ParsedUrlData } from './Main.props.ts';
@@ -38,65 +39,44 @@ function Main() {
 	// и повторной перерисовкой с параметрами из URL
 	const isSearch = useRef(false);
 
-	// достаем из хранилища нужные данные
-	const { categoryId, sortType, searchValue, currentPage } = useSelector((state: RootState) => state.filter);
+	// достаем из хранилища нужные данные по фильтрации
+	// вместо useSelector((state: RootState) => state.filter) вызываем селектор, в котором хранится стрелочная функция
+	const { categoryId, sortType, searchValue, currentPage } = useSelector(selectFilter);
+	// достаем из хранилища данные по пиццам
+	const { pizzas, isLoading, errorMessage } = useSelector((state: RootState) => state.pizza);
 	// функция для вызова методов для изменения состояния
-	const dispatch = useDispatch<AppDispatch>()
-
-	const [isLoading, setIsLoading] = useState(false);
-	const [pizzas, setPizzas] = useState<Pizza[]>([]);
+	const dispatch = useDispatch<AppDispatch>();
 
 	// общее кол-во страниц с пиццами
 	const [totalPageCount, setTotalPageCount] = useState<number>(1);
 
 	// получение товаров с возможностью фильтрации по категории
-	const getProducts = async (sortKey: SortTypeKey, categoryId?: number, searchValue?: string) => {
-		try {
-			// устанавливаем флаг загрузки
-			setIsLoading(true);
-
-			// динамически формируем объект с параметрами в зависимости от переданных необязательных параметров
-			const params: FilterData = {
-				sort_type: sortKey,
-				size: 8,
-				page: currentPage,
-			};
-			if (categoryId) {
-				params.category_id = categoryId;
-			}
-			if (searchValue) {
-				params.search = searchValue;
-			}
-
-			const { data } = await axios.get<PizzaWithPaginationData>(
-				`${envVariables.BASE_URL}/pizzas`,
-				{params: params}
-			);
-
-			// исправление бага, когда, н-р, для 3 страницы не возвращаются товары (т.к. нет столько товаров)
-			// делается повторный запрос с теми же условиями, но для 1 страницы
-			if (!data.items.length && currentPage != 1) {
-				console.warn(`Для страницы №${currentPage} нет товаров. Обновление текущего запроса для страницы №1`)
-				dispatch(setCurrentPage(1));
-			}
-
-			// сохраняем пиццы в состояние
-			setPizzas(data.items);
-			// сохраняем кол-во страниц из данных о пагинации с бэка
-			setTotalPageCount(data.pages)
-			// меняем флаг, что загрузка завершена
-			setIsLoading(false);
-			// 	перехват ошибки, если с бэка придет невалидный JSON
-		} catch (error) {
-			// проверяем тип ошибки
-			if (error instanceof AxiosError) {
-				// выводим текст ошибки с бэка, если есть
-				alert(error.response?.data.detail);
-			}
-			// меняем флаг загрузки
-			setIsLoading(false);
-			return;
+	const getProducts = async () => {
+		// динамически формируем объект с параметрами в зависимости от переданных необязательных параметров
+		const params: FilterData = {
+			sort_type: sortType.key,
+			size: 8,
+			page: currentPage,
+		};
+		if (categoryId) {
+			params.category_id = categoryId;
 		}
+		if (searchValue) {
+			params.search = searchValue;
+		}
+
+		dispatch(fetchPizzas(params));
+
+		// TODO Поправить!!!
+		// исправление бага, когда, н-р, для 3 страницы не возвращаются товары (т.к. нет столько товаров)
+		// делается повторный запрос с теми же условиями, но для 1 страницы
+		// if (!data.items.length && currentPage != 1) {
+		// 	console.warn(`Для страницы №${currentPage} нет товаров. Обновление текущего запроса для страницы №1`);
+		// 	dispatch(setCurrentPage(1));
+		// }
+
+		// сохраняем кол-во страниц из данных о пагинации с бэка
+		// setTotalPageCount(data.pages);
 	};
 
 	const getCart = async () => {
@@ -111,7 +91,7 @@ function Main() {
 				alert(error.response?.data.detail);
 			}
 		}
-	}
+	};
 
 	// парсинг параметров фильтрации из URL
 	useEffect(() => {
@@ -127,30 +107,31 @@ function Main() {
 			// меняем флаг
 			isSearch.current = true;
 		}
-	}, [])
+	}, []);
 
 	// получение пицц при изменении категории, типа сортировки, страницы и поиска по названию
 	useEffect(() => {
 		// делаем запрос со стандартными данными из redux только, если не идет поиск товаров по параметрам из URL
 		// таким образом избавляемся от лишнего запроса на бэк
 		if (!isSearch.current) {
-			getProducts(sortType.key, categoryId, searchValue);
+			getProducts();
 		}
 		// меняем флаг
 		isSearch.current = false;
+
 	}, [categoryId, sortType, searchValue, currentPage]);
 
 	// добавление параметров фильтрации в URL
 	useEffect(() => {
-		const queryString: string = getQueryString(categoryId, searchValue, sortType.key, currentPage)
+		const queryString: string = getQueryString(categoryId, searchValue, sortType.key, currentPage);
 		// дополняем текущий URL сгенерированной строкой с параметрами фильтрации (не забываем вначале ставить знак ?)
-		navigate(`?${queryString}`)
-	}, [categoryId, sortType, searchValue, currentPage])
+		navigate(`?${queryString}`);
+	}, [categoryId, sortType, searchValue, currentPage]);
 
 	// получение товаров в корзине
 	useEffect(() => {
 		getCart();
-	}, [])
+	}, []);
 
 	return (
 		<div className={cn('container', styles['main'])}>
@@ -163,6 +144,7 @@ function Main() {
 				: <Title>Все пиццы</Title>
 			}
 			<div className={styles['products']}>
+				{errorMessage && !isLoading && <p>Ошибка при загрузке товаров!</p> }
 				{isLoading
 					? [...new Array(6)].map((_, index) => <VerticalCardLoader key={index}/>)
 					: pizzas.map(pizza => <VerticalCard key={pizza.pizza_id} {...pizza} />

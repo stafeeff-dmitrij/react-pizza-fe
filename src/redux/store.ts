@@ -1,5 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
 
+import pizzaReducer from './slices/pizzasSlice.ts'
 import filterReducer from './slices/filterSlice.ts'
 import cartReducer from './slices/cartSlice.ts';
 
@@ -8,6 +9,7 @@ import cartReducer from './slices/cartSlice.ts';
 // основное центролизованное хранилище, к которому подключаются слайсы - функции по изменению состояний разных частей приложения
 export const store = configureStore({
 	reducer: {
+		pizza: pizzaReducer,
 		filter: filterReducer,
 		cart: cartReducer
 	},

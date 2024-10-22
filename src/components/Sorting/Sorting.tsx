@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, RootState } from '../../redux/store.ts';
-import { setSortType, SortTypeState } from '../../redux/slices/filterSlice.ts';
+import { AppDispatch } from '../../redux/store.ts';
+import { selectFilter, setSortType, SortTypeState } from '../../redux/slices/filterSlice.ts';
 import { sortTypes } from '../../utils/sort.ts';
 
 import styles from './Sorting.module.scss';
@@ -16,7 +16,8 @@ import styles from './Sorting.module.scss';
 function Sorting() {
 
 	// достаем из хранилища текущее значение сортировки
-	const sortType = useSelector((state: RootState) => state.filter.sortType);
+	// вместо useSelector((state: RootState) => state.filter) вызываем селектор, в котором хранится стрелочная функция
+	const { sortType } = useSelector(selectFilter);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>();
 

@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { HorizontalCardProps } from '../../components/Cards/HorizontalCard/HorizontalCard.props.tsx';
+import { RootState } from '../store.ts';
 
 
 // типизация начального состояния с данными о пиццах в корзине
@@ -83,6 +84,10 @@ export const cartSlice = createSlice({
 		}
 	},
 });
+
+// создаем селектор, который будет возвращать часто используемую функцию по возврату состояния из redux,
+// чтобы далее ее переиспользовать вместо того, чтобы всегда писать useSelector((state: RootState) => state.cart) при получении состояния
+export const selectCart = (state: RootState) => state.cart;
 
 // экспортируем (сразу диструктуризируя) функции (методы) по изменению состояния
 export const {

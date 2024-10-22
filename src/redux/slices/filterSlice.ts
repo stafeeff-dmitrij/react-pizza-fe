@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { ParsedUrlData } from '../../pages/Main/Main.props.ts';
+import { RootState } from '../store.ts';
 
 
 export type SortTypeKey = 'popular' | 'price' | 'name';
@@ -73,6 +74,10 @@ export const filterSlice = createSlice({
 		}
 	},
 });
+
+// создаем селектор, который будет возвращать часто используемую функцию по возврату состояния из redux,
+// чтобы далее ее переиспользовать вместо того, чтобы всегда писать useSelector((state: RootState) => state.filter) при получении состояния
+export const selectFilter = (state: RootState) => state.filter;
 
 // экспортируем (сразу диструктуризируя) функции (методы) по изменению состояния
 export const {

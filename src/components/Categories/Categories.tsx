@@ -3,9 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios, { AxiosError } from 'axios';
 import cn from 'classnames';
 
-import { AppDispatch, RootState } from '../../redux/store.ts';
-import { setCategoryId } from '../../redux/slices/filterSlice.ts';
-import { Pizza } from '../../interfaces/pizza.interface.ts';
+import { AppDispatch } from '../../redux/store.ts';
+import { selectFilter, setCategoryId } from '../../redux/slices/filterSlice.ts';
 import getEnvVariables from '../../helpers/envVariables.ts';
 import { CategoriesProps } from './Categories.props.ts';
 import CategoriesLoader from '../Loader/CategoriesLoader.tsx';
@@ -23,7 +22,7 @@ function Categories() {
 	const envVariables = getEnvVariables();
 
 	// достаем из хранилища id текущей выбранной категории
-	const categoryId = useSelector((state: RootState) => state.filter.categoryId)
+	const { categoryId } = useSelector(selectFilter)
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
 
@@ -42,7 +41,7 @@ function Categories() {
 	const getCategories = async () => {
 		try {
 			setIsLoading(true);
-			const { data } = await axios.get<Pizza[]>(`${envVariables.BASE_URL}/categories`);
+			const { data } = await axios.get<CategoriesProps[]>(`${envVariables.BASE_URL}/categories`);
 			const allData: CategoriesProps[] = addAllCategory(data);
 			setCategories(allData);
 			setIsLoading(false);

@@ -2,10 +2,10 @@ import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
-import { RootState } from '../../redux/store.ts';
 import { formattedPrice } from '../../utils/price.ts';
 
 import styles from './CartLink.module.scss';
+import { selectCart } from '../../redux/slices/cartSlice.ts';
 
 
 /**
@@ -15,7 +15,8 @@ import styles from './CartLink.module.scss';
 function CartLink() {
 
 	// достаем из хранилища данные по общему кол-ву товаров в корзине и их общей цене
-	const { totalCount, totalPrice } = useSelector((state: RootState) => state.cart);
+	// вместо useSelector((state: RootState) => state.cart) вызываем селектор, в котором хранится стрелочная функция
+	const { totalCount, totalPrice } = useSelector(selectCart);
 
 	return (
 		<Link to="/cart" className={cn('button', styles['button-cart'])}>

@@ -1,4 +1,15 @@
 import { SortTypeKey, SortTypeValue } from '../../redux/slices/filterSlice.ts';
+import { Pizza } from '../../redux/slices/pizzasSlice.ts';
+
+
+// типизации получаемых данных с бэка с пагинацией пицц
+export interface PizzaWithPaginationData {
+	items: Pizza[];
+	total: number;
+	page: number;
+	size: number;
+	pages: number;
+}
 
 // типизация данных фильтрации перед сохранением в redux
 export interface ParsedUrlData {

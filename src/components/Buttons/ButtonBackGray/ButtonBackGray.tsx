@@ -2,17 +2,18 @@ import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 
 import styles from '../ButtonBackGray/ButtonBackGray.module.scss';
+import { ButtonHTMLAttributes } from 'react';
 
 /**
  * @component
  * @description Кнопка возврата на главную страницу
  */
-function ButtonBackGray() {
+function ButtonBackGray({ className }: ButtonHTMLAttributes<HTMLButtonElement>) {
 
 	const navigate = useNavigate();
 
 	return (
-		<button className={cn('button', styles['go-back-btn'])} onClick={() => navigate('/')}>
+		<button className={cn('button', styles['go-back-btn'], className)} onClick={() => navigate('/')}>
 			<svg
 				width="8" height="14" viewBox="0 0 8 14" fill="none" xmlns="http://www.w3.org/2000/svg"
 			>

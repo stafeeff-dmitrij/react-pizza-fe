@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import cn from 'classnames';
 import axios, { AxiosError } from 'axios';
 
@@ -8,8 +9,8 @@ import { PizzaSizes, PizzaTypes } from '../../../helpers/contains.ts';
 import { VerticalCardProps } from './VerticalCard.props.ts';
 import { sizesConst } from '../../../helpers/mock-data/sizes.ts';
 import { doughTypesConst } from '../../../helpers/mock-data/dough_types.ts';
-import { AppDispatch, RootState } from '../../../redux/store.ts';
-import { addPizza } from '../../../redux/slices/cartSlice.ts';
+import { AppDispatch } from '../../../redux/store.ts';
+import { addPizza, selectCart } from '../../../redux/slices/cartSlice.ts';
 import { HorizontalCardProps, size, type } from '../HorizontalCard/HorizontalCard.props.tsx';
 import getEnvVariables from '../../../helpers/envVariables.ts';
 
@@ -27,7 +28,8 @@ function VerticalCard(pizza: VerticalCardProps) {
 	const envVariables = getEnvVariables();
 
 	// достаем из хранилища данные по товарам в корзине
-	const { pizzas } = useSelector((state: RootState) => state.cart);
+	// вместо useSelector((state: RootState) => state.cart) вызываем селектор, в котором хранится стрелочная функция
+	const { pizzas } = useSelector(selectCart);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
 
@@ -82,12 +84,14 @@ function VerticalCard(pizza: VerticalCardProps) {
 	return (
 		<div className={styles['wrapper']}>
 			<div className={styles['card']}>
-				<img
-					className={styles['image']}
-					src={pizza.image}
-					alt={pizza.name}
-				/>
-				<h4 className={styles['title']}>{pizza.name}</h4>
+				<Link to={`/pizza/${pizza.pizza_id}`}>
+					<img
+						className={styles['image']}
+						src={pizza.image}
+						alt={pizza.name}
+					/>
+					<h4 className={styles['title']}>{pizza.name}</h4>
+				</Link>
 				<div className={styles['selector']}>
 					<ul className={styles['selector-list']}>
 						{doughTypesConst.map(

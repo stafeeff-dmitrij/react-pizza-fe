@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import cn from 'classnames';
 
 import CartLink from '../../components/CartLink/CartLink.tsx';
@@ -16,7 +16,9 @@ import styles from './Header.module.scss';
  */
 function Header() {
 
-	const dispatch = useDispatch<AppDispatch>()
+	const dispatch = useDispatch<AppDispatch>();
+	// текущий путь
+	const { pathname } = useLocation();
 
 	return (
 		<div className={cn('container', styles['header'])}>
@@ -30,8 +32,10 @@ function Header() {
 					</div>
 				</div>
 			</Link>
-			<Search/>
-			<CartLink/>
+			{/* выводим поиск только на главной */}
+			{pathname === '/'&&  <Search/>}
+			{/* выводим ссылку на корзину только на главной и детальной странице товаров */}
+			{(pathname === '/' || pathname.includes('/pizza')) && <CartLink/>}
 		</div>
 	);
 }

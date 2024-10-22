@@ -5,9 +5,9 @@ import cn from 'classnames';
 import Title from '../../../components/Title/Title.tsx';
 import EmptyCart from '../EmptyCart/EmptyCart.tsx';
 import ButtonBackGray from '../../../components/Buttons/ButtonBackGray/ButtonBackGray.tsx';
-import { AppDispatch, RootState } from '../../../redux/store.ts';
+import { AppDispatch } from '../../../redux/store.ts';
 import HorizontalCard from '../../../components/Cards/HorizontalCard/HorizontalCard.tsx';
-import { clearCart } from '../../../redux/slices/cartSlice.ts';
+import { clearCart, selectCart } from '../../../redux/slices/cartSlice.ts';
 import getEnvVariables from '../../../helpers/envVariables.ts';
 import { formattedPrice } from '../../../utils/price.ts';
 
@@ -24,7 +24,8 @@ function Cart() {
 	const envVariables = getEnvVariables();
 
 	// достаем из хранилища данные по общему кол-ву товаров в корзине и их общей цене
-	const { pizzas, totalCount, totalPrice } = useSelector((state: RootState) => state.cart);
+	// вместо useSelector((state: RootState) => state.cart) вызываем селектор, в котором хранится стрелочная функция
+	const { pizzas, totalCount, totalPrice } = useSelector(selectCart);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
 
