@@ -7,6 +7,8 @@ import './styles/styles.scss';
 
 function App() {
 
+	// TODO Грузить данные о корзине
+
 	return (
 		<div className="wrapper">
 			<Header/>
