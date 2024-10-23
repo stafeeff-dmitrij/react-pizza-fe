@@ -1,16 +1,17 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-
-import getEnvVariables from '../../../helpers/envVariables.ts';
-import { CategoryApiProps } from './categoryApi.props.ts';
+import { baseApi } from './baseApi.ts';
 
 
-// переменные окружения
-const envVariables = getEnvVariables();
+// типизация получаемых данных о категориях с бэка
+export interface CategoryApiProps {
+	id: number,
+	name: string,
+}
 
-// получение всех категорий
-export const categoryApi = createApi({
-	reducerPath: 'categoriesApi',
-	baseQuery: fetchBaseQuery({ baseUrl: `${envVariables.BASE_URL}` }),
+/**
+ * @function
+ * @description Получение и кэширование всех категорий
+ */
+export const categoryApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
 		getCategories: builder.query<CategoryApiProps[], []>({
 			query: () => `/categories`,

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import cn from 'classnames';
 
 import { AppDispatch } from '../../redux/store.ts';
-import { useGetCategoriesQuery } from '../../redux/slices/categoryApi/categoryApi.ts';
+import { useGetCategoriesQuery } from '../../redux/api/categoryApi.ts';
 import { selectFilter, setCategoryId } from '../../redux/slices/filterSlice.ts';
 import CategoriesLoader from '../Loader/CategoriesLoader.tsx';
 

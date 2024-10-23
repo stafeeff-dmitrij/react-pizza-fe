@@ -1,10 +1,8 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import axios, { AxiosError } from 'axios';
 import cn from 'classnames';
 
-import { doughTypesConst } from '../../../helpers/mock-data/dough_types.ts';
-import { sizesConst } from '../../../helpers/mock-data/sizes.ts';
 import { HorizontalCardProps } from './HorizontalCard.props.tsx';
 import { addPizza, decrementPizza, deletePizza } from '../../../redux/slices/cartSlice.ts';
 import getEnvVariables from '../../../helpers/envVariables.ts';
@@ -12,6 +10,7 @@ import { AppDispatch } from '../../../redux/store.ts';
 import { formattedPrice } from '../../../utils/price.ts';
 
 import styles from './HorizontalCard.module.scss';
+import { selectParams } from '../../../redux/slices/paramsSlice.ts';
 
 
 /**
@@ -24,6 +23,9 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 	// переменные окружения
 	const envVariables = getEnvVariables();
 
+	// достаем из хранилища данные по товарам в корзине
+	// вместо useSelector((state: RootState) => state.params) вызываем селектор, в котором хранится стрелочная функция
+	const { doughTypes, sizes } = useSelector(selectParams);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>();
 
@@ -85,12 +87,12 @@ function HorizontalCard(pizza: HorizontalCardProps) {
 	};
 
 	useEffect(() => {
-		doughTypesConst.map(type => {
+		doughTypes.map(type => {
 				if (type.id === pizza.type_id) {
 					setTypePizza(type.name.toLowerCase());
 				}
 			},
-			sizesConst.map(size => {
+			sizes.map(size => {
 					if (size.id === pizza.size_id) {
 						setSizePizza(size.value);
 					}
