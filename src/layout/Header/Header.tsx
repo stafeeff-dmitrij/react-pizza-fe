@@ -4,8 +4,8 @@ import cn from 'classnames';
 
 import CartLink from '../../components/CartLink/CartLink.tsx';
 import Search from '../../components/Search/Search.tsx';
-import { clearFilterParams } from '../../redux/slices/filterSlice.ts';
 import { AppDispatch } from '../../redux/store.ts';
+import { clearFilterParams } from '../../redux/slices/pizzasSlice.ts';
 
 import styles from './Header.module.scss';
 
@@ -16,9 +16,10 @@ import styles from './Header.module.scss';
  */
 function Header() {
 
-	const dispatch = useDispatch<AppDispatch>();
 	// текущий путь
 	const { pathname } = useLocation();
+
+	const dispatch = useDispatch<AppDispatch>();
 
 	return (
 		<div className={cn('container', styles['header'])}>

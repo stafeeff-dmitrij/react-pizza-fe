@@ -7,7 +7,7 @@ import styles from '../ButtonBackBlack/ButtonBackBlack.module.scss';
  * @component
  * @description Кнопка возврата на главную страницу
  */
-function ButtonBackBlack() {
+const ButtonBackBlack = () => {
 
 	const navigate = useNavigate();
 

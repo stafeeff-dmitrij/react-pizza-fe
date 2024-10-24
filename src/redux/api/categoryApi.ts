@@ -13,7 +13,9 @@ export interface CategoryApiProps {
  */
 export const categoryApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
-		getCategories: builder.query<CategoryApiProps[], []>({
+		// CategoryApiProps[] - типизация возвращаемых данных
+		// void - типизация входящих параметров - нет входящих параметров
+		getCategories: builder.query<CategoryApiProps[], void>({
 			query: () => `/categories`,
 			// после получения данных из нельзя просто так изменить в компоненте, однако это можно сделать
 			// через transformResponse (в данном случае добавляем нулевую категорию "Все", которой нет на бэке)
@@ -28,6 +30,6 @@ export const categoryApi = baseApi.injectEndpoints({
 	}),
 });
 
-// наименование хука для дальнейшего вызова метода по запросу категорий с бэка называется произвольно
-// главное, чтобы в названии было use... и ...Query
+// наименование хука для дальнейшего вызова метода по запросу категорий с бэка называется как определенные выше функция getCategories
+// плюс use вначале и Query в конце
 export const { useGetCategoriesQuery } = categoryApi;

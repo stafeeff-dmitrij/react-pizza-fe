@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -8,12 +9,11 @@ import ButtonAdd from '../../Buttons/ButtonAdd/ButtonAdd.tsx';
 import { PizzaSizes, PizzaTypes } from '../../../helpers/contains.ts';
 import { VerticalCardProps } from './VerticalCard.props.ts';
 import { AppDispatch } from '../../../redux/store.ts';
-import { addPizza, selectCart } from '../../../redux/slices/cartSlice.ts';
-import { HorizontalCardProps, size, type } from '../HorizontalCard/HorizontalCard.props.tsx';
+import { addPizza, CardPositionProps, selectCart, size, type } from '../../../redux/slices/cartSlice.ts';
+import { selectParams } from '../../../redux/slices/paramsSlice.ts';
 import getEnvVariables from '../../../helpers/envVariables.ts';
 
 import styles from './VarticalCard.module.scss';
-import { selectParams } from '../../../redux/slices/paramsSlice.ts';
 
 
 /**
@@ -21,7 +21,8 @@ import { selectParams } from '../../../redux/slices/paramsSlice.ts';
  * @description Вертикальная карточка товара
  * @prop {object} pizza - данные о пицце
  */
-function VerticalCard(pizza: VerticalCardProps) {
+// 1 вариант типизации пропсов (2 вариант в HorizontalCard)
+const VerticalCard: React.FC<VerticalCardProps> = (pizza) => {
 
 	// переменные окружения
 	const envVariables = getEnvVariables();
@@ -40,7 +41,7 @@ function VerticalCard(pizza: VerticalCardProps) {
 	// добавление товара в корзину
 	const onClickAdd = async () => {
 		try {
-			const { data } = await axios.post<HorizontalCardProps>(`${envVariables.BASE_URL}/cart`, {
+			const { data } = await axios.post<CardPositionProps>(`${envVariables.BASE_URL}/cart`, {
 				pizza_id: pizza.pizza_id,
 				type_id: typePizza,
 				size_id: sizePizza,
@@ -121,7 +122,7 @@ function VerticalCard(pizza: VerticalCardProps) {
 				</div>
 				<div className={styles['bottom']}>
 					<div className={styles['price']}>от {pizza.price} ₽</div>
-					<ButtonAdd count={count} addProduct={onClickAdd}/>
+					<ButtonAdd count={count} onClickAdd={onClickAdd}/>
 				</div>
 			</div>
 		</div>

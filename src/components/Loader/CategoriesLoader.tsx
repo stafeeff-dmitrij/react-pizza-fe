@@ -4,7 +4,7 @@ import ContentLoader from 'react-content-loader';
  * @component
  * @description Лоадер для категорий пицц
  */
-const CategoriesLoader = () => {
+function CategoriesLoader() {
 	return (
 		<ContentLoader
 			speed={1}

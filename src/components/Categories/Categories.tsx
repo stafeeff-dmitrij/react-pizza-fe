@@ -2,10 +2,10 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cn from 'classnames';
 
-import { AppDispatch } from '../../redux/store.ts';
+import { AppDispatch, RootState } from '../../redux/store.ts';
 import { useGetCategoriesQuery } from '../../redux/api/categoryApi.ts';
-import { selectFilter, setCategoryId } from '../../redux/slices/filterSlice.ts';
 import CategoriesLoader from '../Loader/CategoriesLoader.tsx';
+import { setCategoryId } from '../../redux/slices/pizzasSlice.ts';
 
 import styles from './Categories.module.scss';
 
@@ -17,10 +17,10 @@ import styles from './Categories.module.scss';
 function Categories() {
 
 	// запрос данных о категориях
-	const { data, isSuccess , isLoading, isError, error } = useGetCategoriesQuery([]);
+	const { data, isSuccess , isLoading, isError, error } = useGetCategoriesQuery();
 
 	// достаем из хранилища id текущей выбранной категории
-	const { categoryId } = useSelector(selectFilter)
+	const { categoryId  } = useSelector((state: RootState) => state.pizza);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
 

@@ -3,8 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 // для отложенного вызова функций
 import debounce from 'lodash.debounce';
 
-import { AppDispatch } from '../../redux/store.ts';
-import { selectFilter, setSearchValue } from '../../redux/slices/filterSlice.ts';
+import { AppDispatch, RootState } from '../../redux/store.ts';
+import { setSearchValue } from '../../redux/slices/pizzasSlice.ts';
 
 import styles from './Search.module.scss';
 
@@ -15,8 +15,8 @@ import styles from './Search.module.scss';
  */
 function Search() {
 
-	// вместо useSelector((state: RootState) => state.filter) вызываем селектор, в котором хранится стрелочная функция
-	const { searchValue} = useSelector(selectFilter);
+	// достаем из хранилища нужные данные
+	const { searchValue } = useSelector((state: RootState) => state.pizza);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>();
 

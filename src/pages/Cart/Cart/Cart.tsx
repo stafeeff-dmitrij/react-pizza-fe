@@ -29,6 +29,7 @@ function Cart() {
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
 
+	// TODO Вынести логику в createAsyncThunk
 	// очистка корзины с товарами
 	const onClickClearCart = async () => {
 		// всплывающее подтверждающее окно

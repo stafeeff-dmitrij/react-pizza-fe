@@ -10,6 +10,6 @@ const envVariables = getEnvVariables();
 export const baseApi = createApi({
 	reducerPath: 'api',
 	baseQuery: fetchBaseQuery({ baseUrl: `${envVariables.BASE_URL}` }),
-	tagTypes: ['categories', 'doughTypes', 'Sizes'],
+	tagTypes: ['pizza', 'categories', 'doughTypes', 'sizes'],
 	endpoints: () => ({}),
 });

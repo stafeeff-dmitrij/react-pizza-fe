@@ -1,8 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 
-import { AppDispatch } from '../../redux/store.ts';
-import { selectFilter, setCurrentPage } from '../../redux/slices/filterSlice.ts';
+import { AppDispatch, RootState } from '../../redux/store.ts';
+import { setCurrentPage } from '../../redux/slices/pizzasSlice.ts';
 
 import styles from './Pagination.module.scss';
 
@@ -11,11 +11,10 @@ import styles from './Pagination.module.scss';
  * @component
  * @description Пагинация товаров
  */
-function Pagination({ pageCount }: {pageCount: number}) {
+function Pagination() {
 
-	// достаем из хранилища номер текущей страницы
-	// вместо useSelector((state: RootState) => state.filter) вызываем селектор, в котором хранится стрелочная функция
-	const { currentPage } = useSelector(selectFilter);
+	// достаем из хранилища нужные данные
+	const { currentPage, totalPage } = useSelector((state: RootState) => state.pizza);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>();
 
@@ -29,7 +28,7 @@ function Pagination({ pageCount }: {pageCount: number}) {
 			previousLabel="<"
 			onPageChange={(event) => dispatch(setCurrentPage(event.selected + 1))}
 			marginPagesDisplayed={1}
-			pageCount={pageCount}
+			pageCount={totalPage}
 			forcePage={currentPage - 1}
 			renderOnZeroPageCount={null}
 		/>

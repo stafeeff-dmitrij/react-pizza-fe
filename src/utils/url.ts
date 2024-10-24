@@ -1,7 +1,7 @@
 import qs from 'qs';
 
 import { FilterUrlData } from '../pages/Main/Main.props.ts';
-import { SortTypeKey } from '../redux/slices/filterSlice.ts';
+import { SortTypeKey } from '../redux/slices/pizzasSlice.ts';
 
 
 /**

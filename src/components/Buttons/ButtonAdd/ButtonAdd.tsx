@@ -1,3 +1,4 @@
+import * as React from 'react';
 import cn from 'classnames';
 
 import { ButtonAddProps } from './ButtonAdd.props.ts';
@@ -9,11 +10,11 @@ import styles from './ButtonAdd.module.scss';
  * @component
  * @description Кнопка добавления товара в корзину
  * @prop {number} count - счетчик с кол-вом товара
- * @prop {function} addProduct - добавление товара в корзину
+ * @prop {function} onClick - обработчик клика для добавления товара в корзину
  */
-function ButtonAdd({ count, addProduct }: ButtonAddProps) {
+const ButtonAdd: React.FC<ButtonAddProps> = ({ count, onClickAdd }) => {
 	return (
-		<button className={cn('button', 'outline', styles['button-add'])} onClick={addProduct}>
+		<button className={cn('button', 'outline', styles['button-add'])} onClick={onClickAdd}>
 			<svg
 				className={styles['plus-icon']}
 				width="12"

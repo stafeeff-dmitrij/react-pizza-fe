@@ -2,9 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import cn from 'classnames';
 
 import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch } from '../../redux/store.ts';
-import { selectFilter, setSortType, SortTypeState } from '../../redux/slices/filterSlice.ts';
+import { AppDispatch, RootState } from '../../redux/store.ts';
 import { sortTypes } from '../../utils/sort.ts';
+import { setSortType, SortTypeState } from '../../redux/slices/pizzasSlice.ts';
 
 import styles from './Sorting.module.scss';
 
@@ -16,8 +16,7 @@ import styles from './Sorting.module.scss';
 function Sorting() {
 
 	// достаем из хранилища текущее значение сортировки
-	// вместо useSelector((state: RootState) => state.filter) вызываем селектор, в котором хранится стрелочная функция
-	const { sortType } = useSelector(selectFilter);
+	const { sortType  } = useSelector((state: RootState) => state.pizza);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>();
 
@@ -40,7 +39,6 @@ function Sorting() {
 	// в данном случае мы обращаемся к главному родительскому элементу body, которого нет в данном компоненте Sorting
 	// обращение к главному DOM-элементу в данном случае приемлемо
 	useEffect(() => {
-
 		// специально вынесли для передачи при навешивании и удалении обработчика клика для body
 		const handleClickOutside = (event: MouseEvent) => {
 			// сохраняем path - массив дочерних DOM-элементов, находящихся внутри элемента, по которому был клик

@@ -1,15 +1,18 @@
+import * as React from 'react';
+import cn from 'classnames';
+
 import { TitleProps } from './Title.props.ts';
 
 import styles from './Title.module.scss';
-import cn from 'classnames';
+
 
 /**
  * @component
  * @description Заголовок H1
  * @prop {Object} children - текст заголовка
- * @prop {Object} className - стили
+ * @prop {string} className - стили
  */
-const Title = ({ children, className }: TitleProps) => {
+const Title: React.FC<TitleProps> = ({ children, className }) => {
 	return (
 		<h1 className={cn(styles['title'], className)}>{children}</h1>
 	);

@@ -1,14 +1,17 @@
+import * as React from 'react';
+import { ButtonHTMLAttributes } from 'react';
 import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 
 import styles from '../ButtonBackGray/ButtonBackGray.module.scss';
-import { ButtonHTMLAttributes } from 'react';
+
 
 /**
  * @component
  * @description Кнопка возврата на главную страницу
+ * @prop {string} className - стили
  */
-function ButtonBackGray({ className }: ButtonHTMLAttributes<HTMLButtonElement>) {
+const ButtonBackGray: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ className }) => {
 
 	const navigate = useNavigate();
 

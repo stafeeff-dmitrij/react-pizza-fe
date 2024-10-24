@@ -9,7 +9,9 @@ import { DoughType, setDoughTypes, setSizes, Size } from '../slices/paramsSlice.
 export const paramsApi = baseApi.injectEndpoints({
 	endpoints: (builder) => ({
 		// получение и сохранение типов теста для пицц
-		getDoughTypes: builder.query<DoughType[], []>({
+		// DoughType[] - типизация возвращаемых данных
+		// void - типизация входящих параметров - нет входящих параметров
+		getDoughTypes: builder.query<DoughType[], void>({
 			query: () => `/dough_types`,
 			// после выполнения запроса сохраняем данные в хранилище Redux
 			onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
@@ -23,7 +25,9 @@ export const paramsApi = baseApi.injectEndpoints({
 			providesTags: ['doughTypes'],
 		}),
 		// получение и сохранение размеров пицц
-		getSizes: builder.query<Size[], []>({
+		// DoughType[] - типизация возвращаемых данных
+		// void - типизация входящих параметров - нет входящих параметров
+		getSizes: builder.query<Size[], void>({
 			query: () => `/sizes`,
 			// после выполнения запроса сохраняем данные в хранилище Redux
 			onQueryStarted: async (_, { dispatch, queryFulfilled }) => {
@@ -34,11 +38,11 @@ export const paramsApi = baseApi.injectEndpoints({
 					console.error(error);
 				}
 			},
-			providesTags: ['Sizes'],
+			providesTags: ['sizes'],
 		}),
 	}),
 });
 
-// наименование хука для дальнейшего вызова метода по запросу категорий с бэка называется произвольно
-// главное, чтобы в названии было use... и ...Query
+// наименование хука для дальнейшего вызова метода по запросу категорий с бэка называется как определенные выше функция getDoughTypes
+// плюс use вначале и Query в конце
 export const { useGetDoughTypesQuery, useGetSizesQuery } = paramsApi;

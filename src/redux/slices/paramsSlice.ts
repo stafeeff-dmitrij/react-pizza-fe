@@ -1,6 +1,7 @@
-import { size, type } from '../../components/Cards/HorizontalCard/HorizontalCard.props.tsx';
+
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../store.ts';
+import { size, type } from './cartSlice.ts';
 
 
 // типизация данных о типе теста
