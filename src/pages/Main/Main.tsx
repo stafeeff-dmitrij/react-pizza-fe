@@ -15,7 +15,7 @@ import { getQueryString } from '../../utils/url.ts';
 import { FilterUrlData } from './Main.props.ts';
 import { getParamsForRequest, getParamsForStore, ParsedUrlData } from '../../utils/filterParams.ts';
 import VerticalCardLoader from '../../components/Loaders/VerticalCardLoader.tsx';
-import { fetchPizzas } from '../../redux/thunks/fetchPizzas.ts';
+import { fetchPizzas } from '../../redux/thunks/pizzas/fetchPizzas.ts';
 
 import styles from './Main.module.scss';
 

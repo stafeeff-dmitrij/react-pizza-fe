@@ -5,7 +5,7 @@ import { Outlet } from 'react-router-dom';
 import Header from './layout/Header/Header.tsx';
 import { useGetDoughTypesQuery, useGetSizesQuery } from './redux/api/paramsApi.ts';
 import { AppDispatch } from './redux/store.ts';
-import { fetchCart } from './redux/thunks/fetchCart.ts';
+import { fetchCart } from './redux/thunks/cart/fetchCart.ts';
 
 import './styles/styles.scss';
 

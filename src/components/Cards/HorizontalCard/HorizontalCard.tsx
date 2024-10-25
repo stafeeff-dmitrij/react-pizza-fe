@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import axios, { AxiosError } from 'axios';
 import cn from 'classnames';
 
-import { addPizza, decrementPizza, deletePizza } from '../../../redux/slices/cartSlice/cartSlice.ts';
-import getEnvVariables from '../../../helpers/envVariables.ts';
 import { AppDispatch } from '../../../redux/store.ts';
 import { formattedPrice } from '../../../utils/price.ts';
 import { selectParams } from '../../../redux/slices/paramsSlice/paramsSlice.ts';
 import { ProductInCard } from './HorizontalCard.props.ts';
+import { addPizza } from '../../../redux/thunks/cart/addPizza.ts';
+import { deletePizza } from '../../../redux/thunks/cart/deletePizza.ts';
+import { decrementCountPizza } from '../../../redux/thunks/cart/decrementCountPizza.ts';
 
 import styles from './HorizontalCard.module.scss';
 
@@ -21,9 +21,6 @@ import styles from './HorizontalCard.module.scss';
 // 2 вариант типизации пропсов (1 вариант в VerticalCard)
 function HorizontalCard(pizza: ProductInCard) {
 
-	// переменные окружения
-	const envVariables = getEnvVariables();
-
 	// достаем из хранилища данные по товарам в корзине
 	// вместо useSelector((state: RootState) => state.params) вызываем селектор, в котором хранится стрелочная функция
 	const { doughTypes, sizes } = useSelector(selectParams);
@@ -33,7 +30,6 @@ function HorizontalCard(pizza: ProductInCard) {
 	const [typePizza, setTypePizza] = useState<string>('-');
 	const [sizePizza, setSizePizza] = useState<number>(30);
 
-	// TODO Вынести логику в createAsyncThunk
 	// удаление товара из корзины
 	const onClickDeletePizza = async () => {
 		// всплывающее подтверждающее окно
@@ -41,53 +37,23 @@ function HorizontalCard(pizza: ProductInCard) {
 		if (window.confirm(
 			`Удалить пиццу: ${pizza.name.toLowerCase()}, ${typePizza} тесто, ${sizePizza} см, кол-во: ${pizza.count} из корзины?`
 		)) {
-			try {
-				await axios.delete(`${envVariables.BASE_URL}/cart/${pizza.id}`);
-				dispatch(deletePizza(pizza));
-			} catch (error) {
-				if (error instanceof AxiosError) {
-					alert(error.response?.data.detail);
-				}
-			}
+			dispatch(deletePizza(pizza));
 		}
 	};
 
-	// TODO Вынести логику в createAsyncThunk
 	// уменьшение товара на один / удаление товара
 	const onClickDecrement = async () => {
-		try {
-			const { data } = await axios.delete<ProductInCard | null>(`${envVariables.BASE_URL}/cart/${pizza.id}`, {
-				params: {
-					one_record: true
-				}
-			});
-			if (data) {
-				dispatch(decrementPizza(data));
-			} else {
-				dispatch(deletePizza(pizza));
-			}
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				alert(error.response?.data.detail);
-			}
-		}
+		dispatch(decrementCountPizza(pizza));
 	};
 
-	// TODO Вынести логику в createAsyncThunk
 	// увеличение товара на один (добавление товара в корзину)
 	const onClickIncrement = async () => {
-		try {
-			const { data } = await axios.post<ProductInCard>(`${envVariables.BASE_URL}/cart`, {
-				pizza_id: pizza.pizza_id,
-				type_id: pizza.type_id,
-				size_id: pizza.size_id,
-			});
-			dispatch(addPizza(data));
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				alert(error.response?.data.detail);
-			}
+		const data = {
+			pizzaId: pizza.pizza_id,
+			typeId: pizza.type_id,
+			sizeId: pizza.size_id,
 		}
+		dispatch(addPizza(data));
 	};
 
 	useEffect(() => {
@@ -103,7 +69,7 @@ function HorizontalCard(pizza: ProductInCard) {
 				}
 			)
 		);
-	}, []);
+	}, [doughTypes, sizes]);
 
 	return (
 		<div className={styles['product']}>

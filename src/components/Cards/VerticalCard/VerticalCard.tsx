@@ -3,17 +3,15 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
-import axios, { AxiosError } from 'axios';
 
 import ButtonAdd from '../../Buttons/ButtonAdd/ButtonAdd.tsx';
 import { PizzaSizes, PizzaTypes } from '../../../helpers/contains.ts';
 import { Pizza } from './VerticalCard.props.ts';
 import { AppDispatch } from '../../../redux/store.ts';
-import { addPizza, selectCart } from '../../../redux/slices/cartSlice/cartSlice.ts';
+import { selectCart } from '../../../redux/slices/cartSlice/cartSlice.ts';
 import { selectParams } from '../../../redux/slices/paramsSlice/paramsSlice.ts';
-import getEnvVariables from '../../../helpers/envVariables.ts';
 import { size, type } from '../../../redux/slices/paramsSlice/paramsSlice.props.ts';
-import { ProductInCard } from '../HorizontalCard/HorizontalCard.props.ts';
+import { addPizza } from '../../../redux/thunks/cart/addPizza.ts';
 
 import styles from './VarticalCard.module.scss';
 
@@ -26,12 +24,9 @@ import styles from './VarticalCard.module.scss';
 // 1 вариант типизации пропсов (2 вариант в HorizontalCard)
 const VerticalCard: React.FC<Pizza> = (pizza) => {
 
-	// переменные окружения
-	const envVariables = getEnvVariables();
-
 	// достаем из хранилища данные по товарам в корзине
 	// вместо useSelector((state: RootState) => state.cart) вызываем селектор, в котором хранится стрелочная функция
-	const { pizzas } = useSelector(selectCart);
+	const { pizzas, errorMessage } = useSelector(selectCart);
 	const { doughTypes, sizes } = useSelector(selectParams);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
@@ -40,23 +35,21 @@ const VerticalCard: React.FC<Pizza> = (pizza) => {
 	const [sizePizza, setSizePizza] = useState<size>(PizzaSizes.small);
 	const [count, setCount] = useState<number>(0);
 
-	// TODO Вынести логику в createAsyncThunk
 	// добавление товара в корзину
 	const onClickAdd = async () => {
-		try {
-			const { data } = await axios.post<ProductInCard>(`${envVariables.BASE_URL}/cart`, {
-				pizza_id: pizza.pizza_id,
-				type_id: typePizza,
-				size_id: sizePizza,
-			});
-			dispatch(addPizza(data));
-			setCount(data.count);
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				alert(error.response?.data.detail);
-			}
+		const data = {
+			pizzaId: pizza.pizza_id,
+			typeId: typePizza,
+			sizeId: sizePizza,
 		}
+		dispatch(addPizza(data));
 	};
+
+	useEffect(() => {
+		if (errorMessage) {
+			alert(errorMessage);
+		}
+	}, [errorMessage]);
 
 	// установка параметров из корзины при первом рендере карточки
 	useEffect(() => {

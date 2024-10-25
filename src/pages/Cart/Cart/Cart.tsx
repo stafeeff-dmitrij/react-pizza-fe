@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from 'react-redux';
-import axios, { AxiosError } from 'axios';
 import cn from 'classnames';
 
 import Title from '../../../components/Title/Title.tsx';
@@ -7,9 +6,9 @@ import EmptyCart from '../EmptyCart/EmptyCart.tsx';
 import ButtonBackGray from '../../../components/Buttons/ButtonBackGray/ButtonBackGray.tsx';
 import { AppDispatch } from '../../../redux/store.ts';
 import HorizontalCard from '../../../components/Cards/HorizontalCard/HorizontalCard.tsx';
-import { clearCart, selectCart } from '../../../redux/slices/cartSlice/cartSlice.ts';
-import getEnvVariables from '../../../helpers/envVariables.ts';
+import { selectCart } from '../../../redux/slices/cartSlice/cartSlice.ts';
 import { formattedPrice } from '../../../utils/price.ts';
+import { clearCart } from '../../../redux/thunks/cart/clearCart.ts';
 
 import styles from './Cart.module.scss';
 
@@ -20,29 +19,18 @@ import styles from './Cart.module.scss';
  */
 function Cart() {
 
-	// переменные окружения
-	const envVariables = getEnvVariables();
-
 	// достаем из хранилища данные по общему кол-ву товаров в корзине и их общей цене
 	// вместо useSelector((state: RootState) => state.cart) вызываем селектор, в котором хранится стрелочная функция
 	const { pizzas, totalCount, totalPrice } = useSelector(selectCart);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
 
-	// TODO Вынести логику в createAsyncThunk
 	// очистка корзины с товарами
 	const onClickClearCart = async () => {
 		// всплывающее подтверждающее окно
 		// при подтверждении будет true и выполнится следующий код
 		if (window.confirm('Очистить корзину?')) {
-			try {
-				await axios.delete(`${envVariables.BASE_URL}/cart`);
-				dispatch(clearCart());
-			} catch (error) {
-				if (error instanceof AxiosError) {
-					alert(error.response?.data.detail);
-				}
-			}
+			dispatch(clearCart());
 		}
 	}
 

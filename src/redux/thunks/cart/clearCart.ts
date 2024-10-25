@@ -1,23 +1,19 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 
-import getEnvVariables from '../../helpers/envVariables.ts';
-import { ProductInCard } from '../../components/Cards/HorizontalCard/HorizontalCard.props.ts';
+import getEnvVariables from '../../../helpers/envVariables.ts';
 
 
 // переменные окружения
 const envVariables = getEnvVariables();
 
-// асинхронный action (действие) на запрос данных о товарах в корзине
-export const fetchCart = createAsyncThunk(
+// асинхронный action (действие) для очистки корзины
+export const clearCart = createAsyncThunk(
 	// уникальное наименование action для внутренней работы redux
-	'cart/fetchCart',
+	'cart/clearCart',
 	async (_, thunkAPI) => {
 		try {
-			const { data } = await axios.get<ProductInCard[]>(
-				`${envVariables.BASE_URL}/cart`
-			);
-			return data;
+			await axios.delete(`${envVariables.BASE_URL}/cart`);
 		} catch (error) {
 			if (error instanceof AxiosError) {
 				// пробрасываем наверх ошибку, передав в нее возможный текст сообщение из ответа сервера

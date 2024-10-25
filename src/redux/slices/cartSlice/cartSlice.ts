@@ -3,7 +3,11 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { RootState } from '../../store.ts';
 import { cartState } from './cartSlice.props.ts';
 import { ProductInCard } from '../../../components/Cards/HorizontalCard/HorizontalCard.props.ts';
-import { fetchCart } from '../../thunks/fetchCart.ts';
+import { fetchCart } from '../../thunks/cart/fetchCart.ts';
+import { addPizza } from '../../thunks/cart/addPizza.ts';
+import { clearCart } from '../../thunks/cart/clearCart.ts';
+import { deletePizza } from '../../thunks/cart/deletePizza.ts';
+import { decrementCountPizza } from '../../thunks/cart/decrementCountPizza.ts';
 
 
 // начальное состояние
@@ -12,7 +16,6 @@ const initialState: cartState = {
 	totalCount: 0,
 	totalPrice: 0,
 	isLoading: false,
-	errorMessage: '',
 };
 
 export const cartSlice = createSlice({
@@ -21,25 +24,6 @@ export const cartSlice = createSlice({
 	// начальное состояние
 	initialState,
 	reducers: {
-		// добавление пиццы в корзину
-		// в action в payload хранится передаваемый объект пиццы
-		addPizza: (state, action: PayloadAction<ProductInCard>) => {
-			// ищем такую же пиццу с таким же типом теста и размером в корзине
-			const findPizza = state.pizzas.find(pizza =>
-				pizza.id === action.payload.id && pizza.size_id === action.payload.size_id && pizza.type_id === action.payload.type_id
-			);
-			// увеличиваем кол-во пицц в данной позиции
-			if (findPizza) {
-				findPizza.count = action.payload.count;
-				findPizza.price = action.payload.price;
-			} else {
-				// если такой пиццы нет в корзине, добавляем
-				state.pizzas.push(action.payload);
-			}
-			// увеличиваем общее кол-во и стоимость пицц в корзине
-			state.totalCount += 1;
-			state.totalPrice += Number((action.payload.price / action.payload.count).toFixed(2));
-		},
 		// уменьшение кол-во пицц
 		decrementPizza: (state, action: PayloadAction<ProductInCard>) => {
 			const findPizza = state.pizzas.find(pizza => pizza.id === action.payload.id);
@@ -61,15 +45,14 @@ export const cartSlice = createSlice({
 			}
 		},
 		// удаление товара из корзины
-		deletePizza: (state, action: PayloadAction<ProductInCard>) => {
+		removePizza: (state, action: PayloadAction<ProductInCard>) => {
 			state.pizzas = state.pizzas.filter(pizza => pizza.id !== action.payload.id);
 			state.totalCount -= action.payload.count;
 			state.totalPrice -= action.payload.price;
 		},
-		// очистка корзины (возврат изначального пустого состояния)
-		clearCart: () => initialState
 	},
 	extraReducers: (builder) => {
+		// ПОЛУЧЕНИЕ ТОВАРОВ В КОРЗИНЕ
 		// ожидание отправки данных
 		builder.addCase(fetchCart.pending, (state) => {
 			// обнуляем предыдущее состояние
@@ -98,6 +81,60 @@ export const cartSlice = createSlice({
 			// снимаем флаг загрузки (данные со старыми пиццами уже были очищены в pending)
 			state.isLoading = false;
 		});
+		// ДОБАВЛЕНИЕ ТОВАРА В КОРЗИНУ
+		// успешно
+		builder.addCase(addPizza.fulfilled, (state, action: PayloadAction<ProductInCard>) => {
+			// ищем такую же пиццу с таким же типом теста и размером в корзине
+			const findPizza = state.pizzas.find(pizza =>
+				pizza.id === action.payload.id && pizza.size_id === action.payload.size_id && pizza.type_id === action.payload.type_id
+			);
+			// увеличиваем кол-во пицц в данной позиции
+			if (findPizza) {
+				findPizza.count = action.payload.count;
+				findPizza.price = action.payload.price;
+			} else {
+				// если такой пиццы нет в корзине, добавляем
+				state.pizzas.push(action.payload);
+			}
+			// увеличиваем общее кол-во и стоимость пицц в корзине
+			state.totalCount += 1;
+			state.totalPrice += Number((action.payload.price / action.payload.count).toFixed(2));
+			// снимаем флаг загрузки
+			state.isLoading = false;
+		});
+		// ошибка
+		builder.addCase(addPizza.rejected, (state) => {
+			// снимаем флаг загрузки
+			state.isLoading = false;
+		});
+		// ОЧИСТКА КОРЗИНЫ
+		// успешно (возвращаем состояние как при инициализации)
+		builder.addCase(clearCart.fulfilled, () => initialState);
+		// ошибка
+		builder.addCase(clearCart.rejected, (state) => {
+			// снимаем флаг загрузки
+			state.isLoading = false;
+		});
+		// УДАЛЕНИЕ ТОВАРА ИЗ КОРЗИНЫ
+		// успешно
+		builder.addCase(deletePizza.fulfilled, (state) => {
+			state.isLoading = false;
+		});
+		// ошибка
+		builder.addCase(deletePizza.rejected, (state) => {
+			// снимаем флаг загрузки
+			state.isLoading = false;
+		});
+		// УДАЛЕНИЕ КОЛ-ВА ТОВАРА В КОРЗИНЕ
+		// успешно
+		builder.addCase(decrementCountPizza.fulfilled, (state) => {
+			state.isLoading = false;
+		});
+		// ошибка
+		builder.addCase(decrementCountPizza.rejected, (state) => {
+			// снимаем флаг загрузки
+			state.isLoading = false;
+		});
 	}
 });
 
@@ -107,10 +144,8 @@ export const selectCart = (state: RootState) => state.cart;
 
 // экспортируем (сразу диструктуризируя) функции (методы) по изменению состояния
 export const {
-	addPizza,
 	decrementPizza,
-	deletePizza,
-	clearCart
+	removePizza,
 } = cartSlice.actions;
 // экспортируем по умолчанию редюсер (в store при импорте именуется как filterReducer)
 export default cartSlice.reducer;

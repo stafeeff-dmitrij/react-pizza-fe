@@ -1,11 +1,11 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 
-import getEnvVariables from '../../helpers/envVariables.ts';
-import { PizzaWithPaginationData } from '../../pages/Main/Main.props.ts';
-import { RootState } from '../store.ts';
-import { setCurrentPage } from '../slices/pizzasSlice/pizzasSlice.ts';
-import { SortTypeKey } from '../../components/Sorting/Sorting.props.ts';
+import getEnvVariables from '../../../helpers/envVariables.ts';
+import { PizzaWithPaginationData } from '../../../pages/Main/Main.props.ts';
+import { RootState } from '../../store.ts';
+import { setCurrentPage } from '../../slices/pizzasSlice/pizzasSlice.ts';
+import { SortTypeKey } from '../../../components/Sorting/Sorting.props.ts';
 
 
 // типизации отправляемых данных на бэк для фильтрации пицц
