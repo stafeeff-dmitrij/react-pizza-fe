@@ -4,8 +4,8 @@ import cn from 'classnames';
 
 import { AppDispatch, RootState } from '../../redux/store.ts';
 import { useGetCategoriesQuery } from '../../redux/api/categoryApi.ts';
-import CategoriesLoader from '../Loader/CategoriesLoader.tsx';
-import { setCategoryId } from '../../redux/slices/pizzasSlice.ts';
+import { setCategoryId } from '../../redux/slices/pizzasSlice/pizzasSlice.ts';
+import CategoriesLoader from '../Loaders/CategoriesLoader.tsx';
 
 import styles from './Categories.module.scss';
 

@@ -1,35 +1,14 @@
-
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { RootState } from '../store.ts';
-import { size, type } from './cartSlice.ts';
 
+import { RootState } from '../../store.ts';
+import { DoughType, Params, Size } from './paramsSlice.props.ts';
 
-// типизация данных о типе теста
-export interface DoughType {
-	id: type;
-	name: 'Тонкое' | 'Традиционное';
-	price_rise: number;
-}
-
-// типизация данных о размерах пицц
-export interface Size {
-	id: size;
-	value: 26 | 30 | 40;
-	price_rise: number;
-}
-
-// типизация состояния с данными о параметрах пиццы
-export interface Params {
-	doughTypes: DoughType[];
-	sizes: Size[];
-}
 
 // начальное состояние
 const initialState: Params = {
 	doughTypes: [],
 	sizes: [],
 };
-
 
 export const paramsSlice = createSlice({
 	// уникальное название слайса (отображается в devtools)

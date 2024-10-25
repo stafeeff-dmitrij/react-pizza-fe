@@ -7,7 +7,7 @@ import EmptyCart from '../EmptyCart/EmptyCart.tsx';
 import ButtonBackGray from '../../../components/Buttons/ButtonBackGray/ButtonBackGray.tsx';
 import { AppDispatch } from '../../../redux/store.ts';
 import HorizontalCard from '../../../components/Cards/HorizontalCard/HorizontalCard.tsx';
-import { clearCart, selectCart } from '../../../redux/slices/cartSlice.ts';
+import { clearCart, selectCart } from '../../../redux/slices/cartSlice/cartSlice.ts';
 import getEnvVariables from '../../../helpers/envVariables.ts';
 import { formattedPrice } from '../../../utils/price.ts';
 

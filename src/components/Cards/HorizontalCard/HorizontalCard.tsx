@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios, { AxiosError } from 'axios';
 import cn from 'classnames';
 
-import { addPizza, CardPositionProps, decrementPizza, deletePizza } from '../../../redux/slices/cartSlice.ts';
+import { addPizza, decrementPizza, deletePizza } from '../../../redux/slices/cartSlice/cartSlice.ts';
 import getEnvVariables from '../../../helpers/envVariables.ts';
 import { AppDispatch } from '../../../redux/store.ts';
 import { formattedPrice } from '../../../utils/price.ts';
-import { selectParams } from '../../../redux/slices/paramsSlice.ts';
+import { selectParams } from '../../../redux/slices/paramsSlice/paramsSlice.ts';
+import { ProductInCard } from './HorizontalCard.props.ts';
 
 import styles from './HorizontalCard.module.scss';
 
@@ -18,7 +19,7 @@ import styles from './HorizontalCard.module.scss';
  * @prop {object} pizza - данные о пицце
  */
 // 2 вариант типизации пропсов (1 вариант в VerticalCard)
-function HorizontalCard(pizza: CardPositionProps) {
+function HorizontalCard(pizza: ProductInCard) {
 
 	// переменные окружения
 	const envVariables = getEnvVariables();
@@ -55,7 +56,7 @@ function HorizontalCard(pizza: CardPositionProps) {
 	// уменьшение товара на один / удаление товара
 	const onClickDecrement = async () => {
 		try {
-			const { data } = await axios.delete<CardPositionProps | null>(`${envVariables.BASE_URL}/cart/${pizza.id}`, {
+			const { data } = await axios.delete<ProductInCard | null>(`${envVariables.BASE_URL}/cart/${pizza.id}`, {
 				params: {
 					one_record: true
 				}
@@ -76,7 +77,7 @@ function HorizontalCard(pizza: CardPositionProps) {
 	// увеличение товара на один (добавление товара в корзину)
 	const onClickIncrement = async () => {
 		try {
-			const { data } = await axios.post<CardPositionProps>(`${envVariables.BASE_URL}/cart`, {
+			const { data } = await axios.post<ProductInCard>(`${envVariables.BASE_URL}/cart`, {
 				pizza_id: pizza.pizza_id,
 				type_id: pizza.type_id,
 				size_id: pizza.size_id,

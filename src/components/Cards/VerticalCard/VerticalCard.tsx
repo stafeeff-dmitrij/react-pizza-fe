@@ -7,11 +7,13 @@ import axios, { AxiosError } from 'axios';
 
 import ButtonAdd from '../../Buttons/ButtonAdd/ButtonAdd.tsx';
 import { PizzaSizes, PizzaTypes } from '../../../helpers/contains.ts';
-import { VerticalCardProps } from './VerticalCard.props.ts';
+import { Pizza } from './VerticalCard.props.ts';
 import { AppDispatch } from '../../../redux/store.ts';
-import { addPizza, CardPositionProps, selectCart, size, type } from '../../../redux/slices/cartSlice.ts';
-import { selectParams } from '../../../redux/slices/paramsSlice.ts';
+import { addPizza, selectCart } from '../../../redux/slices/cartSlice/cartSlice.ts';
+import { selectParams } from '../../../redux/slices/paramsSlice/paramsSlice.ts';
 import getEnvVariables from '../../../helpers/envVariables.ts';
+import { size, type } from '../../../redux/slices/paramsSlice/paramsSlice.props.ts';
+import { ProductInCard } from '../HorizontalCard/HorizontalCard.props.ts';
 
 import styles from './VarticalCard.module.scss';
 
@@ -22,7 +24,7 @@ import styles from './VarticalCard.module.scss';
  * @prop {object} pizza - данные о пицце
  */
 // 1 вариант типизации пропсов (2 вариант в HorizontalCard)
-const VerticalCard: React.FC<VerticalCardProps> = (pizza) => {
+const VerticalCard: React.FC<Pizza> = (pizza) => {
 
 	// переменные окружения
 	const envVariables = getEnvVariables();
@@ -38,10 +40,11 @@ const VerticalCard: React.FC<VerticalCardProps> = (pizza) => {
 	const [sizePizza, setSizePizza] = useState<size>(PizzaSizes.small);
 	const [count, setCount] = useState<number>(0);
 
+	// TODO Вынести логику в createAsyncThunk
 	// добавление товара в корзину
 	const onClickAdd = async () => {
 		try {
-			const { data } = await axios.post<CardPositionProps>(`${envVariables.BASE_URL}/cart`, {
+			const { data } = await axios.post<ProductInCard>(`${envVariables.BASE_URL}/cart`, {
 				pizza_id: pizza.pizza_id,
 				type_id: typePizza,
 				size_id: sizePizza,

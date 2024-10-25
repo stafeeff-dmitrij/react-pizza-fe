@@ -1,7 +1,7 @@
 import { FilterUrlData } from '../pages/Main/Main.props.ts';
 import { sortTypes } from './sort.ts';
-import { SortTypeKey, SortTypeValue } from '../redux/slices/pizzasSlice.ts';
 import { FilterData } from '../interfaces/pizza.interface.ts';
+import { SortTypeKey, SortTypeValue } from '../components/Sorting/Sorting.props.ts';
 
 
 /**

@@ -1,36 +1,10 @@
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import axios, { AxiosError } from 'axios';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { RootState } from '../store.ts';
-import getEnvVariables from '../../helpers/envVariables.ts';
+import { RootState } from '../../store.ts';
+import { cartState } from './cartSlice.props.ts';
+import { ProductInCard } from '../../../components/Cards/HorizontalCard/HorizontalCard.props.ts';
+import { fetchCart } from '../../thunks/fetchCart.ts';
 
-
-// TODO Вынести типизацию в отдельный файл рядом со слайсом
-// размеры пицц
-export type size = 'small' | 'average' | 'big';
-// тип теста пицц
-export type type = 'slim' | 'traditional';
-
-// типизация данных об позиции с пиццей в корзине
-export interface CardPositionProps {
-	id: number;
-	pizza_id: number;
-	name: string;
-	image: string;
-	price: number;
-	size_id: size;
-	type_id: type;
-	count: number;
-}
-
-// типизация начального состояния с данными о пиццах в корзине
-export interface cartState {
-	pizzas: CardPositionProps[];
-	totalCount: number;
-	totalPrice: number;
-	isLoading: boolean;
-	errorMessage?: string;
-}
 
 // начальное состояние
 const initialState: cartState = {
@@ -41,33 +15,6 @@ const initialState: cartState = {
 	errorMessage: '',
 };
 
-// переменные окружения
-const envVariables = getEnvVariables();
-
-// асинхронный action (действие) на запрос данных о товарах в корзине
-export const fetchCart = createAsyncThunk(
-	// уникальное наименование action для внутренней работы redux
-	'cart/fetchCart',
-	async (_, thunkAPI) => {
-		try {
-			const { data } = await axios.get<CardPositionProps[]>(
-				`${envVariables.BASE_URL}/cart`
-			);
-			return data;
-		} catch (error) {
-			if (error instanceof AxiosError) {
-				// пробрасываем наверх ошибку, передав в нее возможный текст сообщение из ответа сервера
-				// текст ошибки сохранится в action.error.message
-				throw new Error(error.response?.data.detail);
-			}
-			// чтобы TS не ругался, вернем объект ошибки через rejectWithValue во всех остальных случаях
-			console.error(error);
-			// возвращаем объект ошибки (будет доступен в rejected в action)
-			return thunkAPI.rejectWithValue(error);
-		}
-	},
-);
-
 export const cartSlice = createSlice({
 	// уникальное название слайса (отображается в devtools)
 	name: 'cart',
@@ -76,7 +23,7 @@ export const cartSlice = createSlice({
 	reducers: {
 		// добавление пиццы в корзину
 		// в action в payload хранится передаваемый объект пиццы
-		addPizza: (state, action: PayloadAction<CardPositionProps>) => {
+		addPizza: (state, action: PayloadAction<ProductInCard>) => {
 			// ищем такую же пиццу с таким же типом теста и размером в корзине
 			const findPizza = state.pizzas.find(pizza =>
 				pizza.id === action.payload.id && pizza.size_id === action.payload.size_id && pizza.type_id === action.payload.type_id
@@ -94,7 +41,7 @@ export const cartSlice = createSlice({
 			state.totalPrice += Number((action.payload.price / action.payload.count).toFixed(2));
 		},
 		// уменьшение кол-во пицц
-		decrementPizza: (state, action: PayloadAction<CardPositionProps>) => {
+		decrementPizza: (state, action: PayloadAction<ProductInCard>) => {
 			const findPizza = state.pizzas.find(pizza => pizza.id === action.payload.id);
 			if (findPizza) {
 				if (findPizza.count === 1) {
@@ -114,7 +61,7 @@ export const cartSlice = createSlice({
 			}
 		},
 		// удаление товара из корзины
-		deletePizza: (state, action: PayloadAction<CardPositionProps>) => {
+		deletePizza: (state, action: PayloadAction<ProductInCard>) => {
 			state.pizzas = state.pizzas.filter(pizza => pizza.id !== action.payload.id);
 			state.totalCount -= action.payload.count;
 			state.totalPrice -= action.payload.price;
@@ -134,7 +81,7 @@ export const cartSlice = createSlice({
 			state.isLoading = true;
 		});
 		// успешная загрузка данных о пиццах в корзине
-		builder.addCase(fetchCart.fulfilled, (state, action: PayloadAction<CardPositionProps[]>) => {
+		builder.addCase(fetchCart.fulfilled, (state, action: PayloadAction<ProductInCard[]>) => {
 			state.pizzas = action.payload;
 			state.totalCount = action.payload.reduce((count, pizza) => {
 				return count + pizza.count;

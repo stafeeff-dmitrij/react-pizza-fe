@@ -5,7 +5,7 @@ import cn from 'classnames';
 import CartLink from '../../components/CartLink/CartLink.tsx';
 import Search from '../../components/Search/Search.tsx';
 import { AppDispatch } from '../../redux/store.ts';
-import { clearFilterParams } from '../../redux/slices/pizzasSlice.ts';
+import { clearFilterParams } from '../../redux/slices/pizzasSlice/pizzasSlice.ts';
 
 import styles from './Header.module.scss';
 

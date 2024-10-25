@@ -1,5 +1,6 @@
 import { baseApi } from './baseApi.ts';
-import { Pizza } from '../slices/pizzasSlice.ts';
+import { Pizza } from '../../components/Cards/VerticalCard/VerticalCard.props.ts';
+
 
 // типизации получаемых данных о пицце для детальной страницы с бэка
 // наследуясь от интерфейса Pizza наследуем все его поля

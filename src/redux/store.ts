@@ -1,8 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 
-import pizzaReducer from './slices/pizzasSlice.ts'
-import cartReducer from './slices/cartSlice.ts';
-import paramsReducer from './slices/paramsSlice.ts';
+import pizzaReducer from './slices/pizzasSlice/pizzasSlice.ts'
+import cartReducer from './slices/cartSlice/cartSlice.ts';
+import paramsReducer from './slices/paramsSlice/paramsSlice.ts';
 import { baseApi } from './api/baseApi.ts';
 
 

@@ -5,16 +5,17 @@ import cn from 'classnames';
 import qs from 'qs';
 
 import { AppDispatch, RootState } from '../../redux/store.ts';
-import { fetchPizzas, setFilterParams } from '../../redux/slices/pizzasSlice.ts';
+import { setFilterParams } from '../../redux/slices/pizzasSlice/pizzasSlice.ts';
 import Title from '../../components/Title/Title.tsx';
 import Categories from '../../components/Categories/Categories.tsx';
 import Sorting from '../../components/Sorting/Sorting.tsx';
-import VerticalCardLoader from '../../components/Loader/VerticalCardLoader.tsx';
 import VerticalCard from '../../components/Cards/VerticalCard/VerticalCard.tsx';
 import Pagination from '../../components/Pagination/Pagination.tsx';
 import { getQueryString } from '../../utils/url.ts';
 import { FilterUrlData } from './Main.props.ts';
 import { getParamsForRequest, getParamsForStore, ParsedUrlData } from '../../utils/filterParams.ts';
+import VerticalCardLoader from '../../components/Loaders/VerticalCardLoader.tsx';
+import { fetchPizzas } from '../../redux/thunks/fetchPizzas.ts';
 
 import styles from './Main.module.scss';
 

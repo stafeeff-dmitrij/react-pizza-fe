@@ -1,5 +1,6 @@
 import { baseApi } from './baseApi.ts';
-import { DoughType, setDoughTypes, setSizes, Size } from '../slices/paramsSlice.ts';
+import { setDoughTypes, setSizes } from '../slices/paramsSlice/paramsSlice.ts';
+import { DoughType, Size } from '../slices/paramsSlice/paramsSlice.props.ts';
 
 
 /**

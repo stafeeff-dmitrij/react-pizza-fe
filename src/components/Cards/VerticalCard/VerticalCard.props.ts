@@ -1,4 +1,5 @@
-export interface VerticalCardProps {
+// типизации данных о пицце
+export interface Pizza {
 	pizza_id: number,
 	name: string,
 	image: string,

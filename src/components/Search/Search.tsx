@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import debounce from 'lodash.debounce';
 
 import { AppDispatch, RootState } from '../../redux/store.ts';
-import { setSearchValue } from '../../redux/slices/pizzasSlice.ts';
+import { setSearchValue } from '../../redux/slices/pizzasSlice/pizzasSlice.ts';
 
 import styles from './Search.module.scss';
 
@@ -22,7 +22,7 @@ function Search() {
 
 	// локальное состояние с введенным текстом (будет отображаться сразу в инпуте)
 	// searchValue будем изменять через пол секунды вместе с выполнением запроса, чтобы не грузить сильно бэк частыми запросами при вводе каждой буквы
-	const [inputValue, setInputValue] = useState(searchValue);
+	const [inputValue, setInputValue] = useState<string>(searchValue);
 
 	// плохая практика менять DOM-элементы напрямую через document, делать это нужно через useRef!
 	// через хук useRef сохраняем всю реактовскую логику по работе с DOM-элементами в переменную

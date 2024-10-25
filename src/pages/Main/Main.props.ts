@@ -1,4 +1,5 @@
-import { Pizza, SortTypeKey } from '../../redux/slices/pizzasSlice.ts';
+import { Pizza } from '../../components/Cards/VerticalCard/VerticalCard.props.ts';
+import { SortTypeKey } from '../../components/Sorting/Sorting.props.ts';
 
 
 // типизации получаемых данных с бэка с пагинацией пицц

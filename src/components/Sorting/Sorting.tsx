@@ -4,7 +4,8 @@ import cn from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { AppDispatch, RootState } from '../../redux/store.ts';
 import { sortTypes } from '../../utils/sort.ts';
-import { setSortType, SortTypeState } from '../../redux/slices/pizzasSlice.ts';
+import { setSortType } from '../../redux/slices/pizzasSlice/pizzasSlice.ts';
+import { SortTypeState } from './Sorting.props.ts';
 
 import styles from './Sorting.module.scss';
 

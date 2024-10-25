@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import ReactPaginate from 'react-paginate';
 
 import { AppDispatch, RootState } from '../../redux/store.ts';
-import { setCurrentPage } from '../../redux/slices/pizzasSlice.ts';
+import { setCurrentPage } from '../../redux/slices/pizzasSlice/pizzasSlice.ts';
 
 import styles from './Pagination.module.scss';
 

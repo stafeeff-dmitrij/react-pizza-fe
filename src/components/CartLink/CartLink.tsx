@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
 import { formattedPrice } from '../../utils/price.ts';
-import { selectCart } from '../../redux/slices/cartSlice.ts';
+import { selectCart } from '../../redux/slices/cartSlice/cartSlice.ts';
 
 import styles from './CartLink.module.scss';
 
