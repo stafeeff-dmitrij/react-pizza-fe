@@ -40,7 +40,8 @@ export const cartSlice = createSlice({
 						return pizza;
 					});
 				}
-				state.totalCount -= 1;
+				state.totalCount--;
+				// state.totalCount -= 1;  // аналогичная запись
 				state.totalPrice -= Number((findPizza.price / findPizza.count).toFixed(2));
 			}
 		},
@@ -88,7 +89,7 @@ export const cartSlice = createSlice({
 			const findPizza = state.pizzas.find(pizza =>
 				pizza.id === action.payload.id && pizza.size_id === action.payload.size_id && pizza.type_id === action.payload.type_id
 			);
-			// увеличиваем кол-во пицц в данной позиции
+			// увеличиваем кол-во пицц в данной позиции (вернувшиеся данные с бэка)
 			if (findPizza) {
 				findPizza.count = action.payload.count;
 				findPizza.price = action.payload.price;
@@ -97,7 +98,8 @@ export const cartSlice = createSlice({
 				state.pizzas.push(action.payload);
 			}
 			// увеличиваем общее кол-во и стоимость пицц в корзине
-			state.totalCount += 1;
+			state.totalCount++;
+			// state.totalCount += 1;  // аналогичная запись
 			state.totalPrice += Number((action.payload.price / action.payload.count).toFixed(2));
 			// снимаем флаг загрузки
 			state.isLoading = false;
@@ -125,7 +127,7 @@ export const cartSlice = createSlice({
 			// снимаем флаг загрузки
 			state.isLoading = false;
 		});
-		// УДАЛЕНИЕ КОЛ-ВА ТОВАРА В КОРЗИНЕ
+		// УМЕНЬШЕНИЕ КОЛ-ВА ТОВАРА В КОРЗИНЕ
 		// успешно
 		builder.addCase(decrementCountPizza.fulfilled, (state) => {
 			state.isLoading = false;

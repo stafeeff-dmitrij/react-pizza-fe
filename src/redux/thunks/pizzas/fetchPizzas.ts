@@ -2,7 +2,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import axios, { AxiosError } from 'axios';
 
 import getEnvVariables from '../../../helpers/envVariables.ts';
-import { PizzaWithPaginationData } from '../../../pages/Main/Main.props.ts';
+import { PizzasWithPaginationData } from '../../../pages/Main/Main.props.ts';
 import { RootState } from '../../store.ts';
 import { setCurrentPage } from '../../slices/pizzasSlice/pizzasSlice.ts';
 import { SortTypeKey } from '../../../components/Sorting/Sorting.props.ts';
@@ -23,11 +23,14 @@ const envVariables = getEnvVariables();
 
 // асинхронный action (действие) на запрос данных о пиццах
 export const fetchPizzas = createAsyncThunk(
+// вместо типизации в двух местах: params и возвращаемых данных с бэка, можно типизировать createAsyncThunk: возвращаемое значение и параметры
+// export const fetchPizzas = createAsyncThunk<PizzasWithPaginationData, FilterData>(
+
 	// уникальное наименование action для внутренней работы redux
 	'pizza/fetchPizzas',
 	async (params: FilterData, thunkAPI) => {
 		try {
-			const { data } = await axios.get<PizzaWithPaginationData>(
+			const { data } = await axios.get<PizzasWithPaginationData>(
 				`${envVariables.BASE_URL}/pizzas`,
 				{ params: params }
 			);

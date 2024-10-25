@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import { PizzaWithPaginationData } from '../../../pages/Main/Main.props.ts';
+import { PizzasWithPaginationData } from '../../../pages/Main/Main.props.ts';
 import { ParsedUrlData } from '../../../utils/filterParams.ts';
 import { PizzasState } from './pizzasSlice.props.ts';
 import { fetchPizzas } from '../../thunks/pizzas/fetchPizzas.ts';
@@ -82,7 +82,7 @@ export const pizzaSlice = createSlice({
 			state.pizzas = [];
 		});
 		// успешная загрузка данных о пиццах
-		builder.addCase(fetchPizzas.fulfilled, (state, action: PayloadAction<PizzaWithPaginationData>) => {
+		builder.addCase(fetchPizzas.fulfilled, (state, action: PayloadAction<PizzasWithPaginationData>) => {
 			// сохраняем все полученные пиццы в состоянии
 			state.pizzas = action.payload.items;
 			state.totalPage = action.payload.pages;

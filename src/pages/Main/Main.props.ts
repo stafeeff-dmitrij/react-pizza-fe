@@ -3,7 +3,7 @@ import { SortTypeKey } from '../../components/Sorting/Sorting.props.ts';
 
 
 // типизации получаемых данных с бэка с пагинацией пицц
-export interface PizzaWithPaginationData {
+export interface PizzasWithPaginationData {
 	items: Pizza[];
 	total: number;
 	page: number;

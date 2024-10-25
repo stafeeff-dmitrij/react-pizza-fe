@@ -6,6 +6,7 @@ import Title from '../../components/Title/Title.tsx';
 import ButtonBackGray from '../../components/Buttons/ButtonBackGray/ButtonBackGray.tsx';
 import { getFirstUppercase } from '../../utils/ingredients.ts';
 import { useGetPizzaByIdQuery } from '../../redux/api/pizzaApi.ts';
+import { formattedPrice } from '../../utils/price.ts';
 
 import styles from './PizzaDetail.module.scss';
 
@@ -51,7 +52,7 @@ function PizzaDetail() {
 								</div>
 								<div className={styles['price-block']}>
 									<b>Цена:</b>
-									<p className={styles['price']}>от {data.price} ₽</p>
+									<p className={styles['price']}>от {formattedPrice(data.price)} ₽</p>
 								</div>
 							</div>
 							<ButtonBackGray className={styles['padding-left']}/>

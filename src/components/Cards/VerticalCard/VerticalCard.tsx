@@ -5,13 +5,14 @@ import { Link } from 'react-router-dom';
 import cn from 'classnames';
 
 import ButtonAdd from '../../Buttons/ButtonAdd/ButtonAdd.tsx';
-import { PizzaSizes, PizzaTypes } from '../../../helpers/contains.ts';
+import { PizzaSizes, DoughTypes } from '../../../helpers/contains.ts';
 import { Pizza } from './VerticalCard.props.ts';
 import { AppDispatch } from '../../../redux/store.ts';
 import { selectCart } from '../../../redux/slices/cartSlice/cartSlice.ts';
 import { selectParams } from '../../../redux/slices/paramsSlice/paramsSlice.ts';
 import { size, type } from '../../../redux/slices/paramsSlice/paramsSlice.props.ts';
 import { addPizza } from '../../../redux/thunks/cart/addPizza.ts';
+import { formattedPrice } from '../../../utils/price.ts';
 
 import styles from './VarticalCard.module.scss';
 
@@ -31,8 +32,8 @@ const VerticalCard: React.FC<Pizza> = (pizza) => {
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
 
-	const [typePizza, setTypePizza] = useState<type>(PizzaTypes.slim);
-	const [sizePizza, setSizePizza] = useState<size>(PizzaSizes.small);
+	const [typePizza, setTypePizza] = useState<type>(DoughTypes.SLIM);
+	const [sizePizza, setSizePizza] = useState<size>(PizzaSizes.SMALL);
 	const [count, setCount] = useState<number>(0);
 
 	// добавление товара в корзину
@@ -117,7 +118,7 @@ const VerticalCard: React.FC<Pizza> = (pizza) => {
 					</ul>
 				</div>
 				<div className={styles['bottom']}>
-					<div className={styles['price']}>от {pizza.price} ₽</div>
+					<div className={styles['price']}>от {formattedPrice(pizza.price)} ₽</div>
 					<ButtonAdd count={count} onClickAdd={onClickAdd}/>
 				</div>
 			</div>
