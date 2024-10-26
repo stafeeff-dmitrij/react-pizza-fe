@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { memo, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import cn from 'classnames';
 
@@ -140,4 +140,5 @@ function HorizontalCard(pizza: ProductInCard) {
 	);
 }
 
-export default HorizontalCard;
+// Оборачиваем в memo, чтобы не было лишних ненужных перерисовок
+export default memo(HorizontalCard);

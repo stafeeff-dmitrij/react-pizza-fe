@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { ButtonHTMLAttributes } from 'react';
+import { FC, ButtonHTMLAttributes, memo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import cn from 'classnames';
 
@@ -11,7 +10,7 @@ import styles from '../ButtonBackGray/ButtonBackGray.module.scss';
  * @description Кнопка возврата на главную страницу
  * @prop {string} className - стили
  */
-const ButtonBackGray: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ className }) => {
+const ButtonBackGray: FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ className }) => {
 
 	const navigate = useNavigate();
 
@@ -28,6 +27,7 @@ const ButtonBackGray: React.FC<ButtonHTMLAttributes<HTMLButtonElement>> = ({ cla
 			<span className={styles['text']}>Вернуться назад</span>
 		</button>
 	);
-}
+};
 
-export default ButtonBackGray;
+// Оборачиваем в memo, чтобы не было лишних ненужных перерисовок при изменении корзины
+export default memo(ButtonBackGray);

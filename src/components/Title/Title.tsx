@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FC, memo } from 'react';
 import cn from 'classnames';
 
 import { TitleProps } from './Title.props.ts';
@@ -12,10 +12,11 @@ import styles from './Title.module.scss';
  * @prop {Object} children - текст заголовка
  * @prop {string} className - стили
  */
-const Title: React.FC<TitleProps> = ({ children, className }) => {
+const Title: FC<TitleProps> = ({ children, className }) => {
 	return (
 		<h1 className={cn(styles['title'], className)}>{children}</h1>
 	);
 };
 
-export default Title;
+// Оборачиваем в memo, чтобы не было лишних ненужных перерисовок
+export default memo(Title);

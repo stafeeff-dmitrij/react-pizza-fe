@@ -45,7 +45,6 @@ function Main() {
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>();
 
-	// TODO Попробовать сделать через useParams
 	// парсинг параметров фильтрации из URL
 	useEffect(() => {
 		// если в URL есть параметры
@@ -74,7 +73,6 @@ function Main() {
 		isSearch.current = false;
 	}, [categoryId, sortType, searchValue, currentPage]);
 
-	// TODO Попробовать сделать через useParams
 	// добавление параметров фильтрации в URL
 	useEffect(() => {
 		const queryString: string = getQueryString(categoryId, searchValue, sortType.key, currentPage);

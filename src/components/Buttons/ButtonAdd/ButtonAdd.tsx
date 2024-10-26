@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { FC } from 'react';
 import cn from 'classnames';
 
 import { ButtonAddProps } from './ButtonAdd.props.ts';
@@ -12,7 +12,7 @@ import styles from './ButtonAdd.module.scss';
  * @prop {number} count - счетчик с кол-вом товара
  * @prop {function} onClick - обработчик клика для добавления товара в корзину
  */
-const ButtonAdd: React.FC<ButtonAddProps> = ({ count, onClickAdd }) => {
+const ButtonAdd: FC<ButtonAddProps> = ({ count, onClickAdd }) => {
 	return (
 		<button className={cn('button', 'outline', styles['button-add'])} onClick={onClickAdd}>
 			<svg

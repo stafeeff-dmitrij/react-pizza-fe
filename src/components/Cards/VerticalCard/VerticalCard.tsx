@@ -1,5 +1,4 @@
-import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import cn from 'classnames';
@@ -23,7 +22,7 @@ import styles from './VarticalCard.module.scss';
  * @prop {object} pizza - данные о пицце
  */
 // 1 вариант типизации пропсов (2 вариант в HorizontalCard)
-const VerticalCard: React.FC<Pizza> = (pizza) => {
+const VerticalCard: FC<Pizza> = (pizza) => {
 
 	// достаем из хранилища данные по товарам в корзине
 	// вместо useSelector((state: RootState) => state.cart) вызываем селектор, в котором хранится стрелочная функция
