@@ -16,6 +16,7 @@ const initialState: cartState = {
 	totalCount: 0,
 	totalPrice: 0,
 	isLoading: false,
+	errorMessage: '',
 };
 
 export const cartSlice = createSlice({
@@ -43,6 +44,7 @@ export const cartSlice = createSlice({
 				state.totalCount--;
 				// state.totalCount -= 1;  // аналогичная запись
 				state.totalPrice -= Number((findPizza.price / findPizza.count).toFixed(2));
+				state.errorMessage = '';
 			}
 		},
 		// удаление товара из корзины
@@ -50,6 +52,7 @@ export const cartSlice = createSlice({
 			state.pizzas = state.pizzas.filter(pizza => pizza.id !== action.payload.id);
 			state.totalCount -= action.payload.count;
 			state.totalPrice -= action.payload.price;
+			state.errorMessage = '';
 		},
 	},
 	extraReducers: (builder) => {
@@ -74,6 +77,7 @@ export const cartSlice = createSlice({
 				return price + pizza.price;
 			}, 0);
 			state.isLoading = false;
+			state.errorMessage = '';
 		});
 		// ошибка при запросе данных
 		builder.addCase(fetchCart.rejected, (state, action) => {
@@ -103,39 +107,51 @@ export const cartSlice = createSlice({
 			state.totalPrice += Number((action.payload.price / action.payload.count).toFixed(2));
 			// снимаем флаг загрузки
 			state.isLoading = false;
+			state.errorMessage = '';
 		});
 		// ошибка
-		builder.addCase(addPizza.rejected, (state) => {
+		builder.addCase(addPizza.rejected, (state, action) => {
 			// снимаем флаг загрузки
 			state.isLoading = false;
+			// сохраняем в состоянии текст сообщения об ошибке, который ранее вручную извлекли из ответа
+			state.errorMessage = action.error.message;
 		});
 		// ОЧИСТКА КОРЗИНЫ
 		// успешно (возвращаем состояние как при инициализации)
-		builder.addCase(clearCart.fulfilled, () => initialState);
+		builder.addCase(clearCart.fulfilled, (state) => {
+			state = initialState;
+			state.errorMessage = '';
+		});
 		// ошибка
-		builder.addCase(clearCart.rejected, (state) => {
+		builder.addCase(clearCart.rejected, (state, action) => {
 			// снимаем флаг загрузки
 			state.isLoading = false;
+			// сохраняем в состоянии текст сообщения об ошибке, который ранее вручную извлекли из ответа
+			state.errorMessage = action.error.message;
 		});
 		// УДАЛЕНИЕ ТОВАРА ИЗ КОРЗИНЫ
 		// успешно
 		builder.addCase(deletePizza.fulfilled, (state) => {
 			state.isLoading = false;
+			state.errorMessage = '';
 		});
 		// ошибка
-		builder.addCase(deletePizza.rejected, (state) => {
+		builder.addCase(deletePizza.rejected, (state, action) => {
 			// снимаем флаг загрузки
 			state.isLoading = false;
+			state.errorMessage = action.error.message;
 		});
 		// УМЕНЬШЕНИЕ КОЛ-ВА ТОВАРА В КОРЗИНЕ
 		// успешно
 		builder.addCase(decrementCountPizza.fulfilled, (state) => {
 			state.isLoading = false;
+			state.errorMessage = '';
 		});
 		// ошибка
-		builder.addCase(decrementCountPizza.rejected, (state) => {
+		builder.addCase(decrementCountPizza.rejected, (state, action) => {
 			// снимаем флаг загрузки
 			state.isLoading = false;
+			state.errorMessage = action.error.message;
 		});
 	}
 });

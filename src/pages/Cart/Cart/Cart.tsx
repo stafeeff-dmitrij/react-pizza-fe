@@ -11,6 +11,7 @@ import { formattedPrice } from '../../../utils/price.ts';
 import { clearCart } from '../../../redux/thunks/cart/clearCart.ts';
 
 import styles from './Cart.module.scss';
+import { useEffect } from 'react';
 
 
 /**
@@ -21,7 +22,7 @@ function Cart() {
 
 	// достаем из хранилища данные по общему кол-ву товаров в корзине и их общей цене
 	// вместо useSelector((state: RootState) => state.cart) вызываем селектор, в котором хранится стрелочная функция
-	const { pizzas, totalCount, totalPrice } = useSelector(selectCart);
+	const { pizzas, totalCount, totalPrice, errorMessage } = useSelector(selectCart);
 	// функция для вызова методов для изменения состояния
 	const dispatch = useDispatch<AppDispatch>()
 
@@ -33,6 +34,12 @@ function Cart() {
 			dispatch(clearCart());
 		}
 	}
+
+	useEffect(() => {
+		if (errorMessage) {
+			alert(errorMessage);
+		}
+	}, [errorMessage]);
 
 	return (
 		<div className={cn('container', styles['cart'])}>
