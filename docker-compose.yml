@@ -1,0 +1,8 @@
+services:
+
+  react-pizza-fe:
+    container_name: react-pizza-fe
+    build:
+      context: .
+    ports:
+      - '80:80'
